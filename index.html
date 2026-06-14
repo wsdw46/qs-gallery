@@ -2144,18 +2144,18 @@
                 el.addEventListener('click', createRipple);
             });
 
-            // 初始化标签和网格
+            
             initTabs('works');
-            loadGrid('works', 'all'); // 加载全部作品
+            loadGrid('works', 'all'); 
             
             initTabs('photos');
-            loadGrid('photos', 'all'); // 加载全部合影
+            loadGrid('photos', 'all'); 
 
-			// 初始化音乐
+			
             initMusicGrid();
         });
 
-		//禁用图片和链接拖拽
+
     	document.addEventListener('dragstart', function(e) {
             if (e.target.tagName === 'IMG') {
                 e.preventDefault();
