@@ -23,7 +23,7 @@
             
             --md-sys-color-primary: #e0e0e0;
             --md-sys-color-on-primary: #1a1a1a;
-            --md-sys-color-primary-container: #4a4a4a;
+            --md-sys-color-primary-container: #2f363f;
             --md-sys-color-on-primary-container: #ffffff;
 
             --md-sys-color-secondary: #c0c0c0;
@@ -86,10 +86,10 @@
         .sidebar.collapsed .logo-area { gap: 5px; padding-left: 0px; }
 
         .nav-item { display: flex; align-items: center; height: 56px; min-width: 56px; padding: 0 16px; border-radius: 28px; color: var(--md-sys-color-on-surface); cursor: pointer; transition: all 0.2s ease; margin-bottom: 8px; position: relative; overflow: hidden; }
-        .nav-item:hover { background-color: rgba(255, 255, 255, 0.05); padding-left: 20px; }
-        .nav-item.active { background-color: rgba(255, 255, 255, 0.05); color: var(--md-sys-color-on-primary-container); font-weight: 600; position: relative; }
-        .nav-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--md-sys-color-primary); border-radius: 0 2px 2px 0; }
-        [data-theme="light"] .nav-item.active::before { background: #2d3748; }
+        .nav-item:hover { background-color: rgba(150, 150, 150, 0.1); }
+        .nav-item.active { background-color: rgba(150, 150, 150, 0.15); color: var(--md-sys-color-on-primary-container); font-weight: 600; position: relative; }
+        /*.nav-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--md-sys-color-primary); border-radius: 0 2px 2px 0; }
+        [data-theme="light"] .nav-item.active::before { background: #2d3748; }*/
         .nav-item { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
         .nav-item:hover .nav-icon { transform: scale(1.1); }
         .nav-icon { transition: transform 0.25s ease; }
@@ -98,8 +98,8 @@
         .sidebar.collapsed .nav-label { opacity: 0; width: 0; }
 
         .sidebar-bottom-actions { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
-        .icon-btn { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; color: var(--md-sys-color-on-surface); margin-left: 4px; transition: background-color 0.2s; }
-        .icon-btn:hover { background-color: rgba(150, 150, 150, 0.1); }
+        .icon-btn { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; color: var(--md-sys-color-on-surface); margin-left: 4px; transition: background-color 0.2s; position: relative; overflow: hidden; }
+        .icon-btn:hover { background-color: rgba(150, 150, 150, 0.15); }
 
         /* ==== 底部导航 (移动端) ==== */
         .bottom-bar {
@@ -109,7 +109,7 @@
         }
         .bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--md-sys-color-on-surface); padding: 8px; border-radius: 16px; width: 64px; position: relative; overflow: hidden; transition: all 0.3s ease; }
         .bottom-nav-item.active { color: var(--md-sys-color-on-primary-container); }
-        .bottom-nav-item.active .icon-container { background-color: var(--md-sys-color-primary-container); }
+        .bottom-nav-item.active .icon-container { background-color: rgba(150, 150, 150, 0.2); }
         .icon-container { width: 64px; height: 32px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; position: relative; overflow: hidden; transition: background-color 0.3s ease; }
         .bottom-label { font-size: 12px; font-weight: 500; }
 
@@ -123,6 +123,8 @@
         .mobile-more-menu.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
         .mobile-menu-item { padding: 12px 24px 12px 18px; border-radius: 4px; display: flex; align-items: center; gap: 12px; color: var(--md-sys-color-on-surface); position: relative; overflow: hidden; transition: all 0.2s ease; }
         .mobile-menu-item:hover { background: rgba(150, 150, 150, 0.1); }
+        .mobile-menu-item:first-child { border-radius: 20px 20px 4px 4px; padding: 14px 24px 12px 18px; }
+        .mobile-menu-item:last-child { border-radius: 4px 4px 20px 20px; padding: 12px 24px 14px 18px; }
 
         /* ==== 主内容区域 ==== */
         .main-content { flex: 1; height: 100%; position: relative; overflow: hidden; background-color: var(--md-sys-color-background); }
@@ -140,6 +142,7 @@
             color: var(--md-sys-color-on-background); border-left: 3px solid var(--md-sys-color-primary); padding-left: 20px; position: relative; z-index: 2;
             animation: titlePulse 3s ease-in-out infinite;
         }
+        .bio { display: flex; flex-direction: column; gap: 4px; margin: 12px 0px 12px 0px; }
         [data-theme="light"] .bio { color: #1a1a1a; }
 
         /* ==== Lightbox ==== */
@@ -163,7 +166,7 @@
         .masonry-grid { column-count: 3; column-gap: 24px; }
         .masonry-item { break-inside: avoid; margin-bottom: 24px; border-radius: 12px; overflow: hidden; position: relative; cursor: zoom-in; background: var(--md-sys-color-surface-container); transition: transform 0.3s ease; will-change: transform; }
         .reveal-hidden { opacity: 0; transform: translateY(30px); }
-        .reveal-visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .reveal-visible { opacity: 1; transform: translateY(0); transition: opacity 0.4s var(--motion-easing-emphasized), transform 0.4s var(--motion-easing-emphasized); }
         .masonry-item img { width: 100%; display: block; height: auto; object-fit: cover; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .masonry-item:hover { transform: scale(1.02); z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .masonry-item:hover img { transform: scale(1.05); }
@@ -223,7 +226,7 @@
         .model-carousel-title { font-size: 1rem; font-weight: bold; color: var(--md-sys-color-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
         .model-carousel-title span { font-size: 0.85rem; opacity: 0.5; font-weight: normal; }
 
-        .model-carousel { display: flex; flex-direction: row; gap: 16px; overflow-x: auto; padding-bottom: 16px; scroll-snap-type: x mandatory;}
+        .model-carousel { display: flex; flex-direction: row; gap: 16px; overflow-x: auto; padding-top: 4px; padding-bottom: 16px; scroll-snap-type: x mandatory;}
         .model-carousel::-webkit-scrollbar { height: 6px; }
         .model-carousel::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 10px; }
 
@@ -235,8 +238,7 @@
         .model-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
         .model-thumb:hover { opacity: 0.8; transform: translateY(-4px); }
         .model-thumb:hover img { transform: scale(1.05); }
-        .model-thumb.active { opacity: 1; border-color: var(--md-sys-color-primary); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        [data-theme="light"] .model-thumb.active { box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .model-thumb.active { opacity: 1; border-color: var(--md-sys-color-primary); transform: translateY(-4px); }
 
         .model-thumb-label {
             position: absolute; bottom: 0; left: 0; width: 100%; padding: 8px 12px;
@@ -264,7 +266,7 @@
             max-width: 700px; 
             display: flex; 
             gap: 24px; 
-            align-items: flex-start; 
+            align-items: center; 
             flex-wrap: wrap; 
             text-shadow: 0 2px 10px rgba(0,0,0,0.5);
             padding-top: 8px;
@@ -298,7 +300,7 @@
             background: linear-gradient(to right, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.7) 35%, transparent 100%); 
         }
         
-        .avatar { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; 
+        .avatar { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; 
                   background-color: #ffffff; border: 4px solid #ffffff; 
                   box-shadow: 0 8px 20px rgba(0,0,0,0.3);}
         [data-theme="light"] .avatar { 
@@ -339,7 +341,7 @@
         }
         .stats { display: flex; gap: 32px; margin-top: 4px; }
         .stat-item { text-align: center; }
-        .stat-num { font-size: 2rem; font-weight: 700; color: var(--md-sys-color-primary); line-height: 1; margin-bottom: 4px; }
+        .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--md-sys-color-primary); line-height: 1; margin-bottom: 4px; }
         .stat-desc { 
             font-size: 0.8rem; 
             opacity: 0.75; 
@@ -351,7 +353,7 @@
         .tag-cloud-home { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding-top: 0px; margin-top: 20px;}
         .tag-chip-home { background: rgba(255, 255, 255, 0.08); color:#fff; padding: 6px 14px; border: 1px solid rgba(255,255,255,0.15); border-radius: 100px; font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); letter-spacing: 0.02em;}
         [data-theme="light"] .tag-chip-home { background: rgba(255, 255, 255, 0.6); color: #000; border-color: rgba(0,0,0,0.1);}
-        .tag-chip-home:hover { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); transform: translateY(-2px); border-color: transparent; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .tag-chip-home:hover { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); transform: scale(1.1) rotate(2deg); border-color: transparent; }
 
         .about-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; width: 100%; max-width: 800px; margin-top: 20px;}
         .about-photo { aspect-ratio: 1/1; background: var(--md-sys-color-surface-container); border-radius: var(--border-radius-md); overflow: hidden; cursor: pointer; }
@@ -365,13 +367,13 @@
         .filter-btn.active { background: var(--md-sys-color-primary); border-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
         
         /* ==== 写作分享 & 随笔连载 (修复还原的完美排版版) ==== */
-        .article-list { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 1000px; margin: 0 auto;} 
+        .article-list { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 1000px; justify-content: left; } 
         .article-item { padding: 20px; cursor: pointer; transition: all 0.4s var(--motion-easing-emphasized); border-radius: 24px; background: var(--md-sys-color-surface); display: flex; flex-direction: column; gap: 10px; position: relative; border: 1px solid rgba(150,150,150,0.08); will-change: transform, box-shadow;}
         .article-item:hover { background: var(--md-sys-color-surface-container); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
         .article-header { display: flex; flex-direction: column; gap: 10px; width: 100%; transition: all 0.4s; }
         .article-meta { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--md-sys-color-primary); }
-        .article-date { white-space: nowrap; font-family: monospace; opacity: 0.8; }
+        .article-date { white-space: nowrap; opacity: 0.8; }
         .article-badge { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;}
         .article-title { font-size: 1.2rem; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .article-text { display: flex; flex-direction: column; gap: 5px; overflow: hidden; }
@@ -384,7 +386,7 @@
         /* 展开后的全屏沉浸状态 */
         .article-item.expanded { 
             position: absolute; top: 0; left: 0; width: 100%; min-height: 100%; z-index: 100; 
-            background: var(--md-sys-color-background); border: none; border-radius: 0;
+            background: var(--md-sys-color-background); border: 0px solid rgba(150,150,150,0); border-radius: 0;
             padding: 100px 40px 100px 40px; cursor: default; overflow-y: visible; overflow-x: hidden;
             transform: translateY(0); box-shadow: none; animation: articleExpand 0.5s var(--motion-easing-decelerate);
         }
@@ -410,9 +412,9 @@
         
         #writing-back-btn { 
             position: fixed; top: 30px; left: 40px; opacity: 0; pointer-events: none;
-            background: rgba(40,40,40, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            background: var(--md-sys-color-primary-container);; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             color: #ffffff; padding: 10px 22px; border-radius: 100px; font-weight: 500; cursor: pointer; z-index: 200; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: none;
             transition: all 0.4s var(--motion-easing-standard); display: flex; align-items: center; gap: 8px; 
         }
         [data-theme="light"] #writing-back-btn { background: rgba(255,255,255, 0.85); color: #000000; border-color: rgba(0,0,0,0.05); }
@@ -430,7 +432,7 @@
         .play-btn-overlay { position: absolute; bottom: 12px; right: 12px; width: 48px; height: 48px; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s, background 0.2s; z-index: 2; }
         .play-btn-overlay:hover { transform: scale(1.1); }
         .play-btn-overlay svg { width: 28px; height: 28px; fill: currentColor; }
-        .progress-container { width: 100%; height: 4px; background: var(--md-sys-color-secondary-container); cursor: pointer; position: relative; z-index: 3; }
+        .progress-container { width: 100%; height: 4px; background: var(--md-sys-color-primary-container); cursor: pointer; position: relative; z-index: 3; }
         .progress-container:hover { height: 8px; margin-top: -2px; margin-bottom: -2px; }
         .progress-bar { height: 100%; background: var(--md-sys-color-primary); width: 0%; transition: width 0.1s linear; }
         .music-info { padding: 16px; display: flex; flex-direction: column; gap: 4px; }
@@ -458,7 +460,9 @@
         .context-menu { position: fixed; background: var(--md-sys-color-surface-container); border-radius: 24px; padding: 4px; min-width: 170px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 9999; display: none; gap: 2px; flex-direction: column; }
         [data-theme="light"] .context-menu { box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);}
         .context-menu-item { padding: 12px 18px 12px 14px; border-radius: 4px; cursor: pointer; color: var(--md-sys-color-on-surface); font-size: 0.95rem; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease; }
-        .context-menu-item:hover { background: var(--md-sys-color-secondary-container); }
+        .context-menu-item:hover { background: var(--md-sys-color-primary-container); }
+        .context-menu-item:first-child { border-radius: 20px 20px 4px 4px; padding: 14px 20px 12px 14px; }
+        .context-menu-item:last-child { border-radius: 4px 4px 20px 20px; padding: 12px 20px 14px 14px; }
 
         /* ==== 唠嗑区 ==== */
         .chat-container { max-width: 700px; height: calc(100% - 120px); display: flex; flex-direction: column; background: var(--md-sys-color-surface-container); border-radius: var(--border-radius-lg); overflow: hidden; }
@@ -477,7 +481,7 @@
         .link-card { display: flex; align-items: center; background-color: var(--md-sys-color-surface-container); padding: 20px; border-radius: 24px; text-decoration: none; color: inherit; transition: all 0.3s cubic-bezier(0.2, 0, 0, 1); }
         .link-card:hover { transform: translateY(-2px); background-color: rgba(150,150,150,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         [data-theme="light"] .link-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); background-color: #FFFFFF;}
-        .link-icon-box { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 20px; flex-shrink: 0; background: var(--md-sys-color-surface); }
+        .link-icon-box { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 20px; flex-shrink: 0; }
         .link-info { display: flex; flex-direction: column; overflow: hidden; }
         .link-name { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
         .link-id { font-size: 0.9rem; opacity: 0.6; }
@@ -488,7 +492,8 @@
             .bottom-bar { display: flex; }
             .page-container { padding: 20px; padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
             
-            .profile-card { flex-direction: column; text-align: center; padding: 20px 0px 0px 0px; text-shadow: none; }
+            .profile-card { flex-direction: column; text-align: center; padding: 20px 0px 0px 0px; text-shadow: none; align-items: center; gap: 12px; }
+            .tag-cloud-home { justify-content: center; }
             .bg-mask { background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, var(--md-sys-color-background) 100%); }
             
             .stats { justify-content: center; }
@@ -559,16 +564,16 @@
         <div class="logo-area"><img src="images/me/1.jpg" onerror="this.style.display='none'"><span style="font-family:'Noto Sans SC'">秋音的角落</span></div>
         <div class="nav-item active" onclick="switchTab('about')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg><span class="nav-label">关于我</span></div>
         <div class="nav-item" onclick="switchTab('portfolio')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Zm140-360q25 0 42.5-17.5T400-620q0-25-17.5-42.5T340-680q-25 0-42.5 17.5T280-620q0 25 17.5 42.5T340-560Z"/></svg><span class="nav-label">我的创作</span></div>
-        <div class="nav-item" onclick="switchTab('models')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M480-120 200-272v-416l280-152 280 152v416L480-120Zm0-88 200-108v-246L480-454 280-562v246l200 108Zm0-376 196-106-196-106-196 106 196 106Z"/></svg><span class="nav-label">模型展厅</span></div>
+        <div class="nav-item" onclick="switchTab('models')"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-40-343 237-137-237-137-237 137 237 137ZM160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11L160-252Zm320-228Z"></path></svg><span class="nav-label">模型展厅</span></div>
         <div class="nav-item" onclick="switchTab('photos')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="m480-420 240-160-240-160v320Zm28 220h224q-7 26-24 42t-44 20L228-85q-33 5-59.5-15.5T138-154L85-591q-4-33 16-59t53-30l46-6v80l-36 5 54 437 290-36Zm-148-80q-33 0-56.5-23.5T280-360v-440q0-33 23.5-56.5T360-880h440q33 0 56.5 23.5T880-800v440q0 33-23.5 56.5T800-280H360Zm0-80h440v-440H360v440Zm220-220ZM218-164Z"/></svg><span class="nav-label">美好生活</span></div>
-        <div class="nav-item" onclick="switchTab('reference')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z"/></svg><span class="nav-label">参考</span></div>
+        <div class="nav-item" onclick="switchTab('reference')"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M324-111.5Q251-143 197-197t-85.5-127Q80-397 80-480q0-43 9-84.5t26-80.5l62 62q-8 26-12.5 51.5T160-480q0 134 93 227t227 93q134 0 227-93t93-227q0-134-93-227t-227-93q-27 0-52.5 4.5T377-783l-61-61q40-18 80-27t84-9q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80q-83 0-156-31.5Zm-146.5-586Q160-715 160-740t17.5-42.5Q195-800 220-800t42.5 17.5Q280-765 280-740t-17.5 42.5Q245-680 220-680t-42.5-17.5ZM480-480Z"/></svg><span class="nav-label">参考图</span></div>
         <div class="nav-item" onclick="switchTab('writing')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M120-120v-80h480v80H120Zm0-160v-80h720v80H120Zm80-160q-33 0-56.5-23.5T120-520v-240q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v240q0 33-23.5 56.5T760-440H200Zm0-80h560v-240H200v240Zm0 0v-240 240Z"/></svg><span class="nav-label">我想说的</span></div>
         <div class="nav-item" onclick="switchTab('music')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M500-360q42 0 71-29t29-71v-220h120v-80H560v220q-13-10-28-15t-32-5q-42 0-71 29t-29 71q0 42 29 71t71 29ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg><span class="nav-label">音乐分享</span></div>
         <div class="nav-item" onclick="switchTab('chat')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M360-400h80v-320h-80v320Zm160 0h80v-320h-80v320ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg><span class="nav-label">联系我</span></div>
         <div class="nav-item" onclick="switchTab('links')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z"/></svg><span class="nav-label">我的链接</span></div>
         <div class="sidebar-bottom-actions">
-            <div class="icon-btn" onclick="toggleTheme()" title="切换主题"><svg style="width:20px;height:20px;fill:currentColor" viewBox="0 -960 960 960"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/></svg></div>
-            <div class="icon-btn" onclick="toggleSidebar()" title="折叠菜单"><svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></div>
+            <div class="icon-btn" onclick="toggleTheme()" title="切换主题"><svg style="width:24px;height:24px; xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M337.5-463Q311-498 289-537q-5 14-6.5 28.5T281-480q0 83 58 141t141 58q14 0 28.5-2t28.5-6q-39-22-74-48.5T396-396q-32-32-58.5-67ZM567-364.5Q630-328 702-308q-40 51-98 79.5T481-200q-117 0-198.5-81.5T201-480q0-65 28.5-123t79.5-98q20 72 56.5 135T453-452q51 51 114 87.5ZM743-380q-20-5-39.5-11T665-405q8-18 11.5-36.5T680-480q0-83-58.5-141.5T480-680q-20 0-38.5 3.5T405-665q-8-19-13.5-38T381-742q24-9 49-13.5t51-4.5q117 0 198.5 81.5T761-480q0 26-4.5 51T743-380ZM440-840v-120h80v120h-80Zm0 840v-120h80V0h-80Zm323-706-57-57 85-84 57 56-85 85ZM169-113l-57-56 85-85 57 57-85 84Zm671-327v-80h120v80H840ZM0-440v-80h120v80H0Zm791 328-85-85 57-57 84 85-56 57ZM197-706l-84-85 56-57 85 85-57 57Zm199 310Z"></path></svg></div>
+            <div class="icon-btn" onclick="toggleSidebar()" title="折叠菜单"><svg style="width:24px; height:24px;fill:currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></div>
         </div>
     </nav>
 
@@ -576,18 +581,18 @@
     <div class="bottom-bar">
         <div class="bottom-nav-item active" onclick="switchTab('about')"><div class="icon-container"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg></div><span class="bottom-label">我</span></div>
         <div class="bottom-nav-item" onclick="switchTab('portfolio')"><div class="icon-container"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Zm140-360q25 0 42.5-17.5T400-620q0-25-17.5-42.5T340-680q-25 0-42.5 17.5T280-620q0 25 17.5 42.5T340-560Z"/></svg></div><span class="bottom-label">作品</span></div>
-        <div class="bottom-nav-item" onclick="switchTab('models')"><div class="icon-container"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M480-120 200-272v-416l280-152 280 152v416L480-120Zm0-88 200-108v-246L480-454 280-562v246l200 108Zm0-376 196-106-196-106-196 106 196 106Z"/></svg></div><span class="bottom-label">展厅</span></div>
+        <div class="bottom-nav-item" onclick="switchTab('models')"><div class="icon-container"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-40-343 237-137-237-137-237 137 237 137ZM160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11L160-252Zm320-228Z"></path></svg></div><span class="bottom-label">展厅</span></div>
         <div class="bottom-nav-item" onclick="switchTab('writing')"><div class="icon-container"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M120-120v-80h480v80H120Zm0-160v-80h720v80H120Zm80-160q-33 0-56.5-23.5T120-520v-240q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v240q0 33-23.5 56.5T760-440H200Zm0-80h560v-240H200v240Zm0 0v-240 240Z"/></svg></div><span class="bottom-label">文章</span></div>
         <div class="bottom-nav-item" onclick="toggleMobileMenu()"><div class="icon-container"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></div><span class="bottom-label">更多</span></div>
     </div>
     
     <div class="mobile-more-menu" id="mobile-more-menu">
-        <div class="mobile-menu-item" onclick="switchTab('photos'); removeMobileMenu()"><span>美好生活</span></div>
-        <div class="mobile-menu-item" onclick="switchTab('reference'); removeMobileMenu()"><span>参考图</span></div>
-        <div class="mobile-menu-item" onclick="switchTab('music'); removeMobileMenu()"><span>音乐分享</span></div>
-        <div class="mobile-menu-item" onclick="switchTab('chat'); removeMobileMenu()"><span>联系我</span></div>
-        <div class="mobile-menu-item" onclick="switchTab('links'); removeMobileMenu()"><span>我的链接</span></div>
-        <div class="mobile-menu-item" onclick="toggleTheme(); removeMobileMenu()"><span>切换主题</span></div>
+        <div class="mobile-menu-item" onclick="switchTab('photos'); removeMobileMenu()"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="m480-420 240-160-240-160v320Zm28 220h224q-7 26-24 42t-44 20L228-85q-33 5-59.5-15.5T138-154L85-591q-4-33 16-59t53-30l46-6v80l-36 5 54 437 290-36Zm-148-80q-33 0-56.5-23.5T280-360v-440q0-33 23.5-56.5T360-880h440q33 0 56.5 23.5T880-800v440q0 33-23.5 56.5T800-280H360Zm0-80h440v-440H360v440Zm220-220ZM218-164Z"></path></svg><span>美好生活</span></div>
+        <div class="mobile-menu-item" onclick="switchTab('reference'); removeMobileMenu()"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M324-111.5Q251-143 197-197t-85.5-127Q80-397 80-480q0-43 9-84.5t26-80.5l62 62q-8 26-12.5 51.5T160-480q0 134 93 227t227 93q134 0 227-93t93-227q0-134-93-227t-227-93q-27 0-52.5 4.5T377-783l-61-61q40-18 80-27t84-9q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80q-83 0-156-31.5Zm-146.5-586Q160-715 160-740t17.5-42.5Q195-800 220-800t42.5 17.5Q280-765 280-740t-17.5 42.5Q245-680 220-680t-42.5-17.5ZM480-480Z"/></svg><span>参考图</span></div>
+        <div class="mobile-menu-item" onclick="switchTab('music'); removeMobileMenu()"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M500-360q42 0 71-29t29-71v-220h120v-80H560v220q-13-10-28-15t-32-5q-42 0-71 29t-29 71q0 42 29 71t71 29ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"></path></svg><span>音乐分享</span></div>
+        <div class="mobile-menu-item" onclick="switchTab('chat'); removeMobileMenu()"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M360-400h80v-320h-80v320Zm160 0h80v-320h-80v320ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"></path></svg><span>联系我</span></div>
+        <div class="mobile-menu-item" onclick="switchTab('links'); removeMobileMenu()"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z"></path></svg><span>我的链接</span></div>
+        <div class="mobile-menu-item" onclick="toggleTheme(); removeMobileMenu()"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M337.5-463Q311-498 289-537q-5 14-6.5 28.5T281-480q0 83 58 141t141 58q14 0 28.5-2t28.5-6q-39-22-74-48.5T396-396q-32-32-58.5-67ZM567-364.5Q630-328 702-308q-40 51-98 79.5T481-200q-117 0-198.5-81.5T201-480q0-65 28.5-123t79.5-98q20 72 56.5 135T453-452q51 51 114 87.5ZM743-380q-20-5-39.5-11T665-405q8-18 11.5-36.5T680-480q0-83-58.5-141.5T480-680q-20 0-38.5 3.5T405-665q-8-19-13.5-38T381-742q24-9 49-13.5t51-4.5q117 0 198.5 81.5T761-480q0 26-4.5 51T743-380ZM440-840v-120h80v120h-80Zm0 840v-120h80V0h-80Zm323-706-57-57 85-84 57 56-85 85ZM169-113l-57-56 85-85 57 57-85 84Zm671-327v-80h120v80H840ZM0-440v-80h120v80H0Zm791 328-85-85 57-57 84 85-56 57ZM197-706l-84-85 56-57 85 85-57 57Zm199 310Z"></path></svg><span>切换主题</span></div>
     </div>
 
     <!-- 主内容区域 -->
