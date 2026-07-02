@@ -272,6 +272,8 @@
         [data-theme="light"] .profile-card { text-shadow: none; }
         [data-theme="light"] .bio h2 { color: #1a1a1a; }
         [data-theme="light"] .bio p { color: #4a5568; opacity: 1; }
+        [data-theme="light"] .bio-line1 { color: #718096; }
+        [data-theme="light"] .bio-line2 { color: #2d3748; }
         [data-theme="light"] .stat-num { color: #1a1a1a; }
         [data-theme="light"] .stat-desc { color: #718096; opacity: 1; }
         [data-theme="light"] .tag-chip-home { 
@@ -299,7 +301,11 @@
         .avatar { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; 
                   background-color: #ffffff; border: 4px solid #ffffff; 
                   box-shadow: 0 8px 20px rgba(0,0,0,0.3);}
-        [data-theme="light"] .avatar { border-color: #ffffff; }
+        [data-theme="light"] .avatar { 
+            border-color: #ffffff;
+            background-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
 
         .bio h2 { 
             font-size: 2.4rem; 
@@ -312,16 +318,35 @@
         .bio p { 
             line-height: 1.6; 
             opacity: 0.7; 
-            margin-bottom: 24px; 
+            margin-bottom: 0; 
             font-weight: 400;
             font-size: 0.95rem;
             letter-spacing: 0.03em;
             max-width: 400px;
         }
+        .bio-line1 {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            margin-bottom: 2px;
+            letter-spacing: 0.05em;
+        }
+        .bio-line2 {
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-bottom: 24px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
         .stats { display: flex; gap: 32px; margin-top: 4px; }
         .stat-item { text-align: center; }
         .stat-num { font-size: 2rem; font-weight: 700; color: var(--md-sys-color-primary); line-height: 1; margin-bottom: 4px; }
-        .stat-desc { font-size: 0.75rem; opacity: 0.6; letter-spacing: 0.05em; font-weight: 500;}
+        .stat-desc { 
+            font-size: 0.8rem; 
+            opacity: 0.75; 
+            letter-spacing: 0.06em; 
+            font-weight: 500;
+            margin-top: 6px;
+        }
         
         .tag-cloud-home { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding-top: 0px; margin-top: 20px;}
         .tag-chip-home { background: rgba(255, 255, 255, 0.08); color:#fff; padding: 6px 14px; border: 1px solid rgba(255,255,255,0.15); border-radius: 100px; font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); letter-spacing: 0.02em;}
@@ -507,6 +532,7 @@
         if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -582,7 +608,8 @@
                 <img class="avatar" src="images/me/1.jpg" alt="avatar">
                 <div class="bio">
                     <h2>秋音</h2>
-                    <p>在创作与生活之间，记录灵感，也见证热爱与成长</p>
+                    <p class="bio-line1">在创作与生活之间</p>
+                    <p class="bio-line2">记录灵感，也见证热爱与成长</p>
                     <div class="stats">
                         <div class="stat-item"><div class="stat-num">3</div><div class="stat-desc">开源作品</div></div>
                         <div class="stat-item"><div class="stat-num">60+</div><div class="stat-desc">模型作品</div></div>
