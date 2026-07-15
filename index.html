@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="shortcut icon" href="favicon.png">
+    <title>秋音的博客</title>
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet"> -->
+    <!-- 使用系统字体栈替代 Google Fonts，避免中国大陆访问被墙 -->
+    
+    <!-- model-viewer 改为按需动态加载，避免阻塞首屏 -->
+
+    <style>
+        /* ==== 核心样式变量 (MD3) - 深色模式 ==== */
+        :root {
+            --md-sys-color-background: #0d1117;
+            --md-sys-color-on-background: #e2e2e2;
+            --md-sys-color-surface: #161b22;
+            --md-sys-color-surface-container: #21262d;
+            --md-sys-color-on-surface: #c4c7c5;
+            
+            --md-sys-color-primary: #e0e0e0;
+            --md-sys-color-on-primary: #1a1a1a;
+            --md-sys-color-primary-container: #2f363f;
+            --md-sys-color-on-primary-container: #ffffff;
+
+            --md-sys-color-secondary: #c0c0c0;
+            --md-sys-color-secondary-container: #333333;
+            
+            --nav-width-expanded: 280px;
+            --nav-width-collapsed: 80px;
+            --bottom-bar-height: 70px;
+            --border-radius-lg: 24px;
+            --border-radius-md: 16px;
+            
+            --motion-easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1.0);
+            --motion-easing-emphasized: cubic-bezier(0.2, 0.0, 0, 1.0);
+            --motion-easing-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1.0);
+            --motion-duration-medium: 400ms;
+        }
+
+        /* ==== 白天模式变量 ==== */
+        [data-theme="light"] {
+            --md-sys-color-background: #F8F9FA; 
+            --md-sys-color-on-background: #2C3E50;
+            --md-sys-color-surface: #FFFFFF;
+            --md-sys-color-surface-container: #F0F3F5;
+            --md-sys-color-on-surface: #4A5568;
+            --md-sys-color-primary: #2D3748;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #E2E8F0;
+            --md-sys-color-on-primary-container: #1A202C;
+            --md-sys-color-secondary: #718096;
+            --md-sys-color-secondary-container: #EDF2F7;
+        }
+
+        /* 基础设置 */
+        * { box-sizing: border-box; margin: 0; padding: 0; outline:none; }
+        body {
+            font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+            -webkit-font-smoothing: antialiased; background-color: var(--md-sys-color-background); color: var(--md-sys-color-on-background);
+            overflow: hidden; height: 100vh; display: flex; transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        a, button, .nav-item, .bottom-nav-item, .icon-btn, .masonry-item, .article-item, .music-card {
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none;
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 3px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+
+        /* ==== 侧边导航 ==== */
+        .sidebar {
+            width: var(--nav-width-expanded); height: 100%; background-color: var(--md-sys-color-surface);
+            display: flex; flex-direction: column; padding: 24px 12px;
+            transition: width var(--motion-duration-medium) var(--motion-easing-emphasized);
+            border-right: 1px solid rgba(0,0,0,0.05); z-index: 100;
+        }
+        .sidebar.collapsed { width: var(--nav-width-collapsed); }
+        .logo-area { height: 64px; display: flex; align-items: center; gap: 10px; padding-left: 5px; margin-bottom: 24px; font-weight: 700; font-size: 1.5rem; color: var(--md-sys-color-primary); overflow: hidden; white-space: nowrap; transition: all 0.4s ease; }
+        .logo-area img { height: 36px; width: 36px; border: 2px solid var(--md-sys-color-secondary); border-radius: 50%; transition: all 0.4s ease; object-fit: cover;}
+		.logo-area span { transition: all 0.4s ease; }
+        .sidebar.collapsed .logo-area span { opacity: 0; }
+        .sidebar.collapsed .logo-area img { height: 55px; width: 55px; border-radius: 50%; }
+        .sidebar.collapsed .logo-area { gap: 5px; padding-left: 0px; }
+
+        .nav-item { display: flex; align-items: center; height: 56px; min-width: 56px; padding: 0 16px; border-radius: 28px; color: var(--md-sys-color-on-surface); cursor: pointer; transition: all 0.2s ease; margin-bottom: 8px; position: relative; overflow: hidden; }
+        .nav-item:hover { background-color: rgba(150, 150, 150, 0.1); }
+        .nav-item.active { background-color: rgba(150, 150, 150, 0.15); color: var(--md-sys-color-on-primary-container); font-weight: 600; position: relative; }
+        /*.nav-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--md-sys-color-primary); border-radius: 0 2px 2px 0; }
+        [data-theme="light"] .nav-item.active::before { background: #2d3748; }*/
+        .nav-item { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-item:hover .nav-icon { transform: scale(1.1); }
+        .nav-icon { transition: transform 0.25s ease; }
+        .nav-icon { width: 24px; height: 24px; fill: currentColor; flex-shrink: 0; }
+        .nav-label { margin-left: 12px; white-space: nowrap; opacity: 1; transition: opacity 0.2s; }
+        .sidebar.collapsed .nav-label { opacity: 0; width: 0; }
+
+        .sidebar-bottom-actions { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+        .icon-btn { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 50%; cursor: pointer; color: var(--md-sys-color-on-surface); margin-left: 4px; transition: background-color 0.2s; position: relative; overflow: hidden; }
+        .icon-btn:hover { background-color: rgba(150, 150, 150, 0.15); }
+
+        /* ==== 底部导航 (移动端) ==== */
+        .bottom-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom);
+            height: calc(var(--bottom-bar-height) + env(safe-area-inset-bottom)); background-color: var(--md-sys-color-surface-container);
+            display: none; justify-content: space-around; align-items: center; z-index: 200; padding-top: 0px; padding-left: 5px; padding-right: 5px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+        .bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--md-sys-color-on-surface); padding: 8px; border-radius: 16px; width: 64px; position: relative; overflow: hidden; transition: all 0.3s ease; }
+        .bottom-nav-item.active { color: var(--md-sys-color-on-primary-container); }
+        .bottom-nav-item.active .icon-container { background-color: rgba(150, 150, 150, 0.2); }
+        .icon-container { width: 64px; height: 32px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; position: relative; overflow: hidden; transition: background-color 0.3s ease; }
+        .bottom-label { font-size: 12px; font-weight: 500; }
+
+        .mobile-more-menu {
+            position: fixed; bottom: calc(90px + env(safe-area-inset-bottom)); right: 16px;
+            background: var(--md-sys-color-surface-container); border-radius: 24px; padding: 4px;
+            display: flex; flex-direction: column; gap: 2px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transform: translateY(20px); opacity: 0; pointer-events: none; transition: all 0.2s ease; z-index: 201; min-width: 120px;
+        }
+        [data-theme="light"] .mobile-more-menu { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .mobile-more-menu.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .mobile-menu-item { padding: 12px 24px 12px 18px; border-radius: 4px; display: flex; align-items: center; gap: 12px; color: var(--md-sys-color-on-surface); position: relative; overflow: hidden; transition: all 0.2s ease; }
+        .mobile-menu-item:hover { background: rgba(150, 150, 150, 0.1); }
+        .mobile-menu-item:first-child { border-radius: 20px 20px 4px 4px; padding: 14px 24px 12px 18px; }
+        .mobile-menu-item:last-child { border-radius: 4px 4px 20px 20px; padding: 12px 24px 14px 18px; }
+
+        /* ==== 主内容区域 ==== */
+        .main-content { flex: 1; height: 100%; position: relative; overflow: hidden; background-color: var(--md-sys-color-background); }
+        .page-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 40px; padding-bottom: calc(50px + env(safe-area-inset-bottom)); overflow-y: auto; overflow-x: hidden;
+            opacity: 0; display: none; pointer-events: none; transform: translateY(20px);
+            transition: opacity 0.4s var(--motion-easing-emphasized), transform 0.4s var(--motion-easing-emphasized), display 0.4s allow-discrete; z-index: 1;
+            will-change: opacity, transform;
+        }
+        .page-container.active { opacity: 1; display: block; pointer-events: auto; transform: translateY(0); z-index: 2;}
+        
+        @starting-style {
+            .page-container.active {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        h1.page-title {
+            font-size: 3rem; font-weight: 300; margin-bottom: 30px; letter-spacing: -0.02em;
+            color: var(--md-sys-color-on-background); border-left: 3px solid var(--md-sys-color-primary); padding-left: 20px; position: relative; z-index: 2;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+        .bio { display: flex; flex-direction: column; gap: 4px; margin: 12px 0px 12px 0px; }
+        [data-theme="light"] .bio { color: #1a1a1a; }
+
+        /* ==== Lightbox (来自 main.html，按 index.html 主题系统映射) ==== */
+        #lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            -webkit-backdrop-filter: blur(10px) saturate(120%);
+            backdrop-filter: blur(10px) saturate(120%);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; opacity: 0; visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            overflow: hidden; touch-action: none;
+        }
+        [data-theme="light"] #lightbox { background: rgba(255, 255, 255, 0.2); }
+        #lightbox.active { opacity: 1; visibility: visible; }
+        .lightbox-close {
+            position: absolute; top: 20px; right: 20px; height: 42px; width: 42px;
+            color: #fff; font-size: 20px; font-weight: 300; cursor: pointer; line-height: 1;
+            user-select: none; z-index: 10000; background-color: #211f2188; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            -webkit-tap-highlight-color: transparent; transition: all 0.2s ease;
+        }
+        .lightbox-close:hover { background-color: #211f21bc; transform: scale(1.05); }
+        .lightbox-close:active { background-color: #211f21bc; transform: scale(0.95); }
+        #lightbox-img {
+            position: absolute; left: 50%; top: 50%; width: auto; height: auto;
+            max-width: none; max-height: none; object-fit: contain; border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); cursor: grab;
+            -webkit-tap-highlight-color: transparent; opacity: 0;
+            transform: translate(calc(-50% + 0px), calc(-50% + 0px)) scale(0.83);
+            transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+            user-select: none; -webkit-user-drag: none; pointer-events: auto;
+        }
+        #lightbox-img.dragging { cursor: grabbing; transition: opacity 0.45s ease; }
+        .masonry-item, .about-photo { cursor: pointer; }
+        @media (max-width: 700px) {
+            .lightbox-close { top: 12px; right: 12px; height: 35px; width: 35px; font-size: 30px; }
+        }
+
+        /* ==== 瀑布流 ==== */
+        .masonry-grid { column-count: 3; column-gap: 24px; }
+        .masonry-item { break-inside: avoid; margin-bottom: 24px; border-radius: 12px; overflow: hidden; position: relative; cursor: zoom-in; background: var(--md-sys-color-surface-container); box-shadow: 0 10px 30px rgba(0,0,0,0); transition: transform 0.3s ease, box-shadow 0.3s ease; will-change: transform; }
+        .reveal-hidden { opacity: 0; transform: translateY(30px); }
+        .reveal-visible { opacity: 1; transform: translateY(0); transition: opacity 0.4s var(--motion-easing-emphasized), transform 0.4s var(--motion-easing-emphasized); }
+        .masonry-item img { width: 100%; display: block; height: auto; object-fit: cover; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .masonry-item:hover { transform: scale(1.02); z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .masonry-item:hover img { transform: scale(1.05); }
+        .item-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 24px 16px 16px; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, transparent 100%); opacity: 0; transform: translateY(10px); transition: all 0.3s ease; pointer-events: none; }
+        .masonry-item:hover .item-overlay { opacity: 1; transform: translateY(0); }
+        .overlay-title { color: #fff; font-size: 1rem; font-weight: 600; margin-bottom: 4px; transform: translateY(4px); transition: transform 0.3s ease; }
+        .masonry-item:hover .overlay-title { transform: translateY(0); }
+        .overlay-type { color: rgba(255,255,255,0.7); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        @media (max-width: 900px) { .masonry-grid { column-count: 2; column-gap: 16px; } }
+
+        /* ==== 3D 模型展厅排版 (深度优化空间利用率的左右结构版) ==== */
+        .model-showcase-wrapper { 
+            display: flex; flex-direction: row; gap: 40px; /* 改为左右布局 */
+            background: var(--md-sys-color-surface); 
+            border-radius: 32px; padding: 40px; border: 1px solid rgba(150,150,150,0.08); 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
+            /* 动态适配高度，最大化展示区 */
+            height: calc(100vh - 220px); min-height: 550px; max-height: 800px;
+        }
+        [data-theme="light"] .model-showcase-wrapper { box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+
+        /* 左侧面板：文案顶对齐，滚轮底对齐 */
+        .model-left-col {
+            flex: 0 0 35%; min-width: 320px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            height: 100%;
+        }
+
+        .model-info-panel { 
+            flex: 1; display: flex; flex-direction: column; 
+            overflow-y: auto; padding-right: 16px; margin-bottom: 20px;
+        }
+        .model-info-panel::-webkit-scrollbar { width: 4px; }
+        .model-info-panel::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 4px; }
+
+        .model-badge {
+            display: inline-block; padding: 6px 14px; background: var(--md-sys-color-primary); 
+            color: var(--md-sys-color-on-primary); font-size: 0.85rem; font-weight: bold; 
+            border-radius: 100px; margin-bottom: 20px; letter-spacing: 1px; align-self: flex-start;
+        }
+        .model-text-content h2 { font-size: 2.4rem; color: var(--md-sys-color-primary); margin-bottom: 16px; line-height: 1.3;}
+        .model-text-content p { font-size: 1.1rem; line-height: 1.8; opacity: 0.85;}
+
+        /* 右侧超大画布 */
+        .model-viewer-panel { 
+            flex: 1; height: 100%; border-radius: 24px; position: relative; overflow: hidden; 
+            background: var(--md-sys-color-surface-container); border: 1px solid rgba(150,150,150,0.1);
+        }
+        #model-viewer-bg { position: absolute; top:0; left:0; width:100%; height:100%; z-index: 1; background: radial-gradient(circle, rgba(150,150,150,0.1) 0%, transparent 70%); transition: background 0.8s ease; }
+        model-viewer { width: 100%; height: 100%; outline: none; position: relative; z-index: 2; --poster-color: transparent;}
+        .model-loading {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 3; pointer-events: none; gap: 16px;
+            background: var(--md-sys-color-surface-container); opacity: 1; transition: opacity 0.3s ease;
+        }
+        .model-loading.hidden { opacity: 0; pointer-events: none; }
+        .model-loading-spinner {
+            width: 48px; height: 48px; border: 3px solid rgba(150,150,150,0.2);
+            border-top-color: var(--md-sys-color-primary); border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .model-loading-text { color: var(--md-sys-color-on-surface); font-size: 0.9rem; opacity: 0.7; }
+
+        /* 左侧底部的横屏缩略图滑轨 */
+        .model-carousel-track { 
+            flex-shrink: 0; padding-top: 24px; border-top: 1px solid rgba(150,150,150,0.1); 
+        }
+        .model-carousel-title { font-size: 1rem; font-weight: bold; color: var(--md-sys-color-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .model-carousel-title span { font-size: 0.85rem; opacity: 0.5; font-weight: normal; }
+
+        .model-carousel { display: flex; flex-direction: row; gap: 16px; overflow-x: auto; padding-top: 4px; padding-bottom: 16px; scroll-snap-type: x mandatory;}
+        .model-carousel::-webkit-scrollbar { height: 6px; }
+        .model-carousel::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 10px; }
+
+        .model-thumb { 
+            width: 160px; height: 90px; flex-shrink: 0; border-radius: 16px; cursor: pointer; border: 2px solid transparent; 
+            opacity: 0.5; transition: all 0.3s cubic-bezier(0.2, 0, 0, 1); overflow: hidden; 
+            background: var(--md-sys-color-surface-container); position: relative; scroll-snap-align: start;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .model-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .model-thumb:hover { opacity: 0.8; transform: translateY(-4px); }
+        .model-thumb:hover img { transform: scale(1.05); }
+        .model-thumb.active { opacity: 1; border-color: var(--md-sys-color-primary); transform: translateY(-4px); }
+
+        .model-thumb-label {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 8px 12px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: #fff; font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        /* ==== 深度还原图二：关于我 ==== */
+        #page-about { position: relative; } 
+        .bg-slideshow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none; }
+        
+        .bg-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 2s ease-in-out, transform 8s linear; transform: scale(1.05); will-change: opacity, transform;}
+        .bg-slide.active { opacity: 1; transform: scale(1); } 
+        [data-theme="light"] .bg-slide.active { opacity: 0.15; } 
+        
+        .bg-mask { position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+                   background: linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 25%, transparent 100%); z-index: 1; pointer-events: none;}
+        [data-theme="light"] .bg-mask { background: linear-gradient(to right, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.4) 35%, transparent 100%); }
+        
+
+        .profile-card, .tag-cloud-home, .about-gallery { position: relative; z-index: 2; }
+        .profile-card { 
+            border-radius: var(--border-radius-lg); 
+            width: auto; 
+            max-width: 700px; 
+            display: flex; 
+            gap: 24px; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            padding-top: 8px;
+        }
+        [data-theme="light"] .profile-card { text-shadow: none; }
+        [data-theme="light"] .bio h2 { color: #1a1a1a; }
+        [data-theme="light"] .bio p { color: #4a5568; opacity: 1; }
+        [data-theme="light"] .bio-line1 { color: #718096; }
+        [data-theme="light"] .bio-line2 { color: #2d3748; }
+        [data-theme="light"] .stat-num { color: #1a1a1a; }
+        [data-theme="light"] .stat-desc { color: #718096; opacity: 1; }
+        [data-theme="light"] .tag-chip-home { 
+            background: rgba(0, 0, 0, 0.06); 
+            color: #2d3748; 
+            border-color: rgba(0,0,0,0.12);
+        }
+        [data-theme="light"] .tag-chip-home:hover { 
+            background: #2d3748; 
+            color: #fff; 
+        }
+        [data-theme="light"] h1.page-title { 
+            color: #1a1a1a; 
+            border-left-color: #2d3748;
+            animation: titlePulseLight 3s ease-in-out infinite;
+        }
+        @keyframes titlePulseLight { 
+            0%, 100% { border-left-color: rgba(45,55,72,0.3); } 
+            50% { border-left-color: rgba(45,55,72,0.8); } 
+        }
+        
+        .avatar { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; 
+                  background-color: #ffffff; border: 4px solid #ffffff; 
+                  box-shadow: 0 8px 20px rgba(0,0,0,0.3);}
+        [data-theme="light"] .avatar { 
+            border-color: #ffffff;
+            background-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .bio h2 { 
+            font-size: 2.4rem; 
+            margin-bottom: 8px; 
+            color: var(--md-sys-color-primary); 
+            font-weight: 700; 
+            letter-spacing: 0.08em;
+            line-height: 1.2;
+        }
+        .bio p { 
+            line-height: 1.6; 
+            opacity: 0.7; 
+            margin-bottom: 0; 
+            font-weight: 400;
+            font-size: 0.95rem;
+            letter-spacing: 0.03em;
+            max-width: 400px;
+        }
+        .bio-line1 {
+            font-size: 0.85rem;
+            opacity: 0.5;
+            margin-bottom: 2px;
+            letter-spacing: 0.05em;
+        }
+        .bio-line2 {
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-bottom: 24px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+        .stats { display: flex; gap: 32px; margin-top: 4px; }
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--md-sys-color-primary); line-height: 1; margin-bottom: 4px; }
+        .stat-desc { 
+            font-size: 0.8rem; 
+            opacity: 0.75; 
+            letter-spacing: 0.06em; 
+            font-weight: 500;
+            margin-top: 6px;
+        }
+        
+        .tag-cloud-home { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding-top: 0px; margin-top: 20px;}
+        .tag-chip-home { background: rgba(255, 255, 255, 0.08); color:#fff; padding: 6px 14px; border: 1px solid rgba(255,255,255,0.15); border-radius: 100px; font-size: 0.85rem; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); letter-spacing: 0.02em;}
+        [data-theme="light"] .tag-chip-home { background: rgba(255, 255, 255, 0.6); color: #000; border-color: rgba(0,0,0,0.1);}
+        .tag-chip-home:hover { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); transform: scale(1.1) rotate(2deg); border-color: transparent; }
+
+        .about-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; width: 100%; max-width: 800px; margin-top: 20px;}
+        .about-photo { aspect-ratio: 1/1; background: var(--md-sys-color-surface-container); border-radius: var(--border-radius-md); overflow: hidden; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        .about-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; will-change: transform;}
+        .about-photo:hover img { transform: scale(1.1); }
+
+        /* Filter Tabs */
+        .filter-tabs { display: flex; gap: 16px; margin-bottom: 25px; overflow-x: auto; flex-shrink: 0; }
+        .filter-tabs::-webkit-scrollbar { display: none; } 
+        .filter-btn { padding: 10px 20px; margin-bottom: 5px; border-radius: 100px; border: 1px solid var(--md-sys-color-surface-container); background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface); cursor: pointer; position: relative; overflow: hidden; flex-shrink: 0; transition: all 0.2s; }
+        .filter-btn.active { background: var(--md-sys-color-primary); border-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+        
+        /* ==== 写作分享 & 随笔连载 (修复还原的完美排版版) ==== */
+        .article-list { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 1000px; justify-content: left; } 
+        .article-item { padding: 20px; cursor: pointer; transition: all 0.4s var(--motion-easing-emphasized); border-radius: 24px; background: var(--md-sys-color-surface); display: flex; flex-direction: column; gap: 10px; position: relative; border: 1px solid rgba(150,150,150,0.08); will-change: transform, box-shadow;}
+        .article-item:hover { background: var(--md-sys-color-surface-container); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        
+        .article-header { display: flex; flex-direction: column; gap: 10px; width: 100%; transition: all 0.4s; }
+        .article-meta { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--md-sys-color-primary); }
+        .article-date { white-space: nowrap; opacity: 0.8; }
+        .article-badge { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;}
+        .article-title { font-size: 1.2rem; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .article-text { display: flex; flex-direction: column; gap: 5px; overflow: hidden; }
+        .article-excerpt { font-size: 0.95rem; opacity: 0.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
+        
+        .article-imgs { display: flex; gap: 10px; margin-top: 10px; transition: all 0.4s; }
+        .article-imgs.landscape img { height: 100px; width: auto; border-radius: 8px; cursor: zoom-in; object-fit: cover; }
+        .article-imgs.portrait img { height: 140px; width: auto; border-radius: 8px; cursor: zoom-in; object-fit: cover; }
+
+        /* 展开后的全屏沉浸状态 */
+        .article-item.expanded { 
+            position: absolute; top: 0; left: 0; width: 100%; min-height: 100%; z-index: 100; 
+            background: var(--md-sys-color-background); border: 0px solid rgba(150,150,150,0); border-radius: 0;
+            padding: 100px 40px 100px 40px; cursor: default; overflow-y: visible; overflow-x: hidden;
+            transform: translateY(0); box-shadow: none; animation: articleExpand 0.5s var(--motion-easing-decelerate);
+        }
+        @keyframes articleExpand { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        
+        /* 展开后，内容居中，排版变高级 */
+        .article-item.expanded .article-header { align-items: center; text-align: center; margin-bottom: 30px; }
+        .article-item.expanded .article-meta { justify-content: center; margin-bottom: 16px; }
+        .article-item.expanded .article-date { font-size: 1.1rem; opacity: 0.8; letter-spacing: 2px; }
+        .article-item.expanded .article-title { font-size: 2.2rem; margin-bottom: 0; white-space: normal; line-height: 1.3; }
+        .article-item.expanded .article-text { display: none; } /* 隐藏缩略文字 */
+        
+        /* 展开后图片优雅放大居中 */
+        .article-item.expanded .article-imgs { flex-direction: column; align-items: center; margin: 30px 0; }
+        .article-item.expanded .article-imgs img { max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); cursor: zoom-in; }
+        .article-item.expanded .article-imgs.portrait img { max-width: 400px; max-height: 60vh; object-fit: contain; }
+        .article-item.expanded .article-imgs.landscape img { max-width: 800px; max-height: 60vh; object-fit: contain; }
+
+        .article-content-wrapper { max-width: 760px; margin: 0 auto; user-select: text; -webkit-user-select: text; }
+        .article-text-full p { opacity: 0.9; line-height: 2; font-size: 1.1rem; letter-spacing: 0.5px; margin-bottom: 1.8em; color: var(--md-sys-color-on-background); }
+        .drop-cap::first-letter { font-size: 3.5em; float: left; margin-right: 12px; margin-top: 4px; line-height: 0.8; color: var(--md-sys-color-primary); font-weight: 700; font-family: 'Georgia', serif; }
+        .article-item.expanded blockquote { border-left: 5px solid var(--md-sys-color-primary); padding: 20px 24px; margin: 2em 0; background: var(--md-sys-color-surface-container); border-radius: 0 12px 12px 0; font-style: italic; }
+        
+        #writing-back-btn { 
+            position: fixed; top: 30px; left: 40px; opacity: 0; pointer-events: none;
+            background: var(--md-sys-color-primary-container);; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            color: #ffffff; padding: 10px 22px; border-radius: 100px; font-weight: 500; cursor: pointer; z-index: 200; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: none;
+            transition: all 0.4s var(--motion-easing-standard); display: flex; align-items: center; gap: 8px; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        [data-theme="light"] #writing-back-btn { background: rgba(255,255,255, 0.85); color: #000000; border-color: rgba(0,0,0,0.05); }
+        #writing-back-btn:hover { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); transform: scale(1.05); }
+        #writing-back-btn.visible { opacity: 1; pointer-events: auto; }
+
+        /* ==== 音乐分享 ==== */
+        .music-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; width: 100%; }
+        .music-card { background: var(--md-sys-color-surface-container); border-radius: var(--border-radius-md); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; will-change: transform; }
+        .music-card:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); z-index: 5; }
+        [data-theme="light"] .music-card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .music-cover-wrapper { position: relative; width: 100%; padding-top: 100%; background: var(--md-sys-color-surface); }
+        .music-cover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .music-card.playing .music-cover { transform: scale(1.02); }
+        .play-btn-overlay { position: absolute; bottom: 12px; right: 12px; width: 48px; height: 48px; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s, background 0.2s; z-index: 2; }
+        .play-btn-overlay:hover { transform: scale(1.1); }
+        .play-btn-overlay svg { width: 28px; height: 28px; fill: currentColor; }
+        .progress-container { width: 100%; height: 4px; background: var(--md-sys-color-primary-container); cursor: pointer; position: relative; z-index: 3; }
+        .progress-container:hover { height: 8px; margin-top: -2px; margin-bottom: -2px; }
+        .progress-bar { height: 100%; background: var(--md-sys-color-primary); width: 0%; transition: width 0.1s linear; }
+        .music-info { padding: 16px; display: flex; flex-direction: column; gap: 4px; }
+        .music-title { font-size: 1.1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--md-sys-color-on-surface); }
+        .music-artist { font-size: 0.9rem; opacity: 0.7; }
+
+        /* 全局悬浮音乐播放器 */
+        .global-mini-player {
+            position: fixed; bottom: 30px; right: 30px; background: rgba(var(--md-sys-color-surface-container-rgb), 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(150,150,150,0.15); border-radius: 100px; padding: 8px 16px 8px 8px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 150; cursor: pointer; transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+            transform: translateY(100px); opacity: 0; pointer-events: none; 
+        }
+        .global-mini-player.visible { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .global-mini-player:hover { background: var(--md-sys-color-surface-container); transform: translateY(-4px) scale(1.02); }
+        [data-theme="light"] .global-mini-player { background: rgba(255,255,255, 0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .mini-cover { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; animation: spin 10s linear infinite; }
+        .mini-cover.paused { animation-play-state: paused; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .mini-info { display: flex; flex-direction: column; max-width: 120px; }
+        .mini-title { font-size: 0.95rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mini-artist { font-size: 0.75rem; opacity: 0.7; }
+        .mini-controls { width: 36px; height: 36px; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+        .mini-controls:hover { transform: scale(1.1); }
+
+        /* 右键菜单 */
+        .context-menu { position: fixed; background: var(--md-sys-color-surface-container); border-radius: 24px; padding: 4px; min-width: 170px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 9999; display: none; gap: 2px; flex-direction: column; }
+        [data-theme="light"] .context-menu { box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);}
+        .context-menu-item { padding: 12px 18px 12px 14px; border-radius: 4px; cursor: pointer; color: var(--md-sys-color-on-surface); font-size: 0.95rem; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
+        .context-menu-item:hover { background: var(--md-sys-color-primary-container); }
+        .context-menu-item:first-child { border-radius: 20px 20px 4px 4px; padding: 14px 20px 12px 14px; }
+        .context-menu-item:last-child { border-radius: 4px 4px 20px 20px; padding: 12px 20px 14px 14px; }
+
+        /* ==== 唠嗑区 ==== */
+        .chat-container { max-width: 700px; height: calc(100% - 120px); display: flex; flex-direction: column; background: var(--md-sys-color-surface-container); border-radius: var(--border-radius-lg); overflow: hidden; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 0.95rem; line-height: 1.4; animation: fadeIn 0.3s ease; }
+        .msg.me { align-self: flex-end; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-bottom-right-radius: 4px; }
+        .msg.other { align-self: flex-start; background: rgba(150,150,150,0.08); border-bottom-left-radius: 4px; }
+        [data-theme="light"] .msg.other { background: #E2E8F0; }
+        .chat-input-area { padding: 16px; background: rgba(0,0,0,0.2); display: flex; gap: 10px; }
+        [data-theme="light"] .chat-input-area { background: rgba(0,0,0,0.03); border-top: 1px solid rgba(0,0,0,0.05); }
+        .chat-input { flex: 1; background: transparent; border: 1px solid rgba(150,150,150,0.2); color: var(--md-sys-color-on-background); padding: 12px; border-radius: 24px; outline: none; }
+        .chat-send { width: 48px; height: 48px; border-radius: 50%; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;}
+        
+        /* ==== 链接区 ==== */
+        .link-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1000px; margin-top: 20px; }
+        .link-card { display: flex; align-items: center; background-color: var(--md-sys-color-surface-container); padding: 20px; border-radius: 24px; text-decoration: none; color: inherit; transition: all 0.3s cubic-bezier(0.2, 0, 0, 1); }
+        .link-card:hover { transform: translateY(-2px); background-color: rgba(150,150,150,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        [data-theme="light"] .link-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); background-color: #FFFFFF;}
+        .link-icon-box { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-right: 20px; flex-shrink: 0; }
+        .link-info { display: flex; flex-direction: column; overflow: hidden; }
+        .link-name { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
+        .link-id { font-size: 0.9rem; opacity: 0.6; }
+
+        /* ==== 响应式 ==== */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .bottom-bar { display: flex; }
+            .page-container { padding: 20px; padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
+            
+            .profile-card { flex-direction: column; text-align: center; padding: 20px 0px 0px 0px; text-shadow: none; align-items: center; gap: 12px; }
+            .tag-cloud-home { justify-content: center; }
+            .bg-mask { background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, var(--md-sys-color-background) 100%); }
+            
+            .stats { justify-content: center; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .main-content { margin-left: 0; }
+            h1.page-title { font-size: 2rem; margin-bottom: 24px; }
+            .link-grid { grid-template-columns: 1fr; }
+            .filter-tabs { gap: 8px; }
+            .music-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } 
+            .global-mini-player { bottom: calc(var(--bottom-bar-height) + env(safe-area-inset-bottom, 0px) + 16px); right: 16px; padding: 6px 12px 6px 6px;}
+            ::-webkit-scrollbar { width: 0px; height: 0px; }
+            
+            /* 文章移动端适配 */
+            #writing-back-btn { top: 20px; left: 20px; padding: 8px 16px; font-size: 0.95rem; }
+            .article-item.expanded { padding: 80px 20px 120px 20px; }
+            .article-item.expanded .article-title { font-size: 1.8rem; margin-bottom: 20px; }
+            .article-item.expanded .article-imgs.landscape img { max-height: 40vh; }
+            .article-item.expanded .article-imgs.portrait img { max-height: 50vh; }
+
+            /* 移动端 3D 模型展厅深层优化适配 */
+            .model-showcase-wrapper { 
+                flex-direction: column; height: auto; padding: 20px; gap: 20px; 
+                max-height: none; min-height: 0;
+            }
+            .model-left-col { display: contents; } 
+            .model-info-panel { order: 1; padding-right: 0; margin-bottom: 0; flex: none; overflow-y: visible;}
+            .model-viewer-panel { order: 2; height: 400px; width: 100%; border-radius: 16px; flex: none;}
+            .model-carousel-track { order: 3; padding-top: 20px; border-top: none; }
+            .model-text-content h2 { font-size: 1.8rem; margin-bottom: 8px;}
+            .model-badge { margin-bottom: 12px; }
+            .model-thumb { width: 140px; height: 80px; }
+        }
+        span.ripple { position: absolute; border-radius: 50%; transform: scale(0); animation: ripple 0.6s linear; background-color: rgba(150,150,150, 0.1); pointer-events: none;}
+        [data-theme="light"] span.ripple { background-color: rgba(0,0,0, 0.05); }
+        @keyframes titlePulse { 0%, 100% { border-left-color: rgba(255,255,255,0.3); } 50% { border-left-color: rgba(255,255,255,0.8); } }
+        @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+    <script>
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+    <!-- 音乐悬浮播放器 -->
+    <div id="global-mini-player" class="global-mini-player" onclick="switchTab('music')">
+        <img id="mini-cover" class="mini-cover paused" src="" alt="cover">
+        <div class="mini-info"><div id="mini-title" class="mini-title">音乐标题</div><div id="mini-artist" class="mini-artist">艺术家</div></div>
+        <div class="mini-controls" onclick="event.stopPropagation(); togglePlayMusic(currentPlayingId)"><svg id="mini-icon" style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+    </div>
+    
+    <!-- 右键菜单 -->
+    <div id="music-context-menu" class="context-menu">
+        <div class="context-menu-item" onclick="handleContextMenuAction('play')"><svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span id="ctx-play-text">播放/暂停</span></div>
+        <div class="context-menu-item" onclick="handleContextMenuAction('restart')"><svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>重新播放</div>
+    </div>
+    <audio id="global-audio" preload="none"></audio>
+
+    <!-- 侧边导航 -->
+    <nav class="sidebar" id="sidebar">
+        <div class="logo-area"><img src="images/me/1.jpg" onerror="this.style.display='none'"><span style="font-family:'Noto Sans SC'">秋音的角落</span></div>
+        <div class="nav-item active" onclick="switchTab('about')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg><span class="nav-label">关于我</span></div>
+        <div class="nav-item" onclick="switchTab('portfolio')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Zm140-360q25 0 42.5-17.5T400-620q0-25-17.5-42.5T340-680q-25 0-42.5 17.5T280-620q0 25 17.5 42.5T340-560Z"/></svg><span class="nav-label">我的创作</span></div>
+        <div class="nav-item" onclick="switchTab('models')"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-40-343 237-137-237-137-237 137 237 137ZM160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11L160-252Zm320-228Z"></path></svg><span class="nav-label">模型展厅</span></div>
+        <div class="nav-item" onclick="switchTab('photos')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="m480-420 240-160-240-160v320Zm28 220h224q-7 26-24 42t-44 20L228-85q-33 5-59.5-15.5T138-154L85-591q-4-33 16-59t53-30l46-6v80l-36 5 54 437 290-36Zm-148-80q-33 0-56.5-23.5T280-360v-440q0-33 23.5-56.5T360-880h440q33 0 56.5 23.5T880-800v440q0 33-23.5 56.5T800-280H360Zm0-80h440v-440H360v440Zm220-220ZM218-164Z"/></svg><span class="nav-label">记录生活</span></div>
+        <div class="nav-item" onclick="switchTab('reference')"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M324-111.5Q251-143 197-197t-85.5-127Q80-397 80-480q0-43 9-84.5t26-80.5l62 62q-8 26-12.5 51.5T160-480q0 134 93 227t227 93q134 0 227-93t93-227q0-134-93-227t-227-93q-27 0-52.5 4.5T377-783l-61-61q40-18 80-27t84-9q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80q-83 0-156-31.5Zm-146.5-586Q160-715 160-740t17.5-42.5Q195-800 220-800t42.5 17.5Q280-765 280-740t-17.5 42.5Q245-680 220-680t-42.5-17.5ZM480-480Z"/></svg><span class="nav-label">写真</span></div>
+        <div class="nav-item" onclick="switchTab('writing')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M120-120v-80h480v80H120Zm0-160v-80h720v80H120Zm80-160q-33 0-56.5-23.5T120-520v-240q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v240q0 33-23.5 56.5T760-440H200Zm0-80h560v-240H200v240Zm0 0v-240 240Z"/></svg><span class="nav-label">我想说的</span></div>
+        <div class="nav-item" onclick="switchTab('music')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M500-360q42 0 71-29t29-71v-220h120v-80H560v220q-13-10-28-15t-32-5q-42 0-71 29t-29 71q0 42 29 71t71 29ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg><span class="nav-label">音乐分享</span></div>
+        <div class="nav-item" onclick="switchTab('chat')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M360-400h80v-320h-80v320Zm160 0h80v-320h-80v320ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg><span class="nav-label">联系我</span></div>
+        <div class="nav-item" onclick="switchTab('links')"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z"/></svg><span class="nav-label">我的链接</span></div>
+        <div class="sidebar-bottom-actions">
+            <div class="icon-btn" onclick="toggleTheme()" title="切换主题"><svg style="width:24px;height:24px; xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M337.5-463Q311-498 289-537q-5 14-6.5 28.5T281-480q0 83 58 141t141 58q14 0 28.5-2t28.5-6q-39-22-74-48.5T396-396q-32-32-58.5-67ZM567-364.5Q630-328 702-308q-40 51-98 79.5T481-200q-117 0-198.5-81.5T201-480q0-65 28.5-123t79.5-98q20 72 56.5 135T453-452q51 51 114 87.5ZM743-380q-20-5-39.5-11T665-405q8-18 11.5-36.5T680-480q0-83-58.5-141.5T480-680q-20 0-38.5 3.5T405-665q-8-19-13.5-38T381-742q24-9 49-13.5t51-4.5q117 0 198.5 81.5T761-480q0 26-4.5 51T743-380ZM440-840v-120h80v120h-80Zm0 840v-120h80V0h-80Zm323-706-57-57 85-84 57 56-85 85ZM169-113l-57-56 85-85 57 57-85 84Zm671-327v-80h120v80H840ZM0-440v-80h120v80H0Zm791 328-85-85 57-57 84 85-56 57ZM197-706l-84-85 56-57 85 85-57 57Zm199 310Z"></path></svg></div>
+            <div class="icon-btn" onclick="toggleSidebar()" title="折叠菜单"><svg style="width:24px; height:24px;fill:currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></div>
+        </div>
+    </nav>
+
+    <!-- 底部导航 (移动端) -->
+    <div class="bottom-bar">
+        <div class="bottom-nav-item active" onclick="switchTab('about')"><div class="icon-container"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg></div><span class="bottom-label">我</span></div>
+        <div class="bottom-nav-item" onclick="switchTab('portfolio')"><div class="icon-container"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Zm140-360q25 0 42.5-17.5T400-620q0-25-17.5-42.5T340-680q-25 0-42.5 17.5T280-620q0 25 17.5 42.5T340-560Z"/></svg></div><span class="bottom-label">作品</span></div>
+        <div class="bottom-nav-item" onclick="switchTab('models')"><div class="icon-container"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-40-343 237-137-237-137-237 137 237 137ZM160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11L160-252Zm320-228Z"></path></svg></div><span class="bottom-label">展厅</span></div>
+        <div class="bottom-nav-item" onclick="switchTab('writing')"><div class="icon-container"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M120-120v-80h480v80H120Zm0-160v-80h720v80H120Zm80-160q-33 0-56.5-23.5T120-520v-240q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v240q0 33-23.5 56.5T760-440H200Zm0-80h560v-240H200v240Zm0 0v-240 240Z"/></svg></div><span class="bottom-label">文章</span></div>
+        <div class="bottom-nav-item" onclick="toggleMobileMenu()"><div class="icon-container"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></div><span class="bottom-label">更多</span></div>
+    </div>
+    
+    <div class="mobile-more-menu" id="mobile-more-menu">
+        <div class="mobile-menu-item" onclick="switchTab('photos'); removeMobileMenu()"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="m480-420 240-160-240-160v320Zm28 220h224q-7 26-24 42t-44 20L228-85q-33 5-59.5-15.5T138-154L85-591q-4-33 16-59t53-30l46-6v80l-36 5 54 437 290-36Zm-148-80q-33 0-56.5-23.5T280-360v-440q0-33 23.5-56.5T360-880h440q33 0 56.5 23.5T880-800v440q0 33-23.5 56.5T800-280H360Zm0-80h440v-440H360v440Zm220-220ZM218-164Z"></path></svg><span>美好生活</span></div>
+        <div class="mobile-menu-item" onclick="switchTab('reference'); removeMobileMenu()"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M324-111.5Q251-143 197-197t-85.5-127Q80-397 80-480q0-43 9-84.5t26-80.5l62 62q-8 26-12.5 51.5T160-480q0 134 93 227t227 93q134 0 227-93t93-227q0-134-93-227t-227-93q-27 0-52.5 4.5T377-783l-61-61q40-18 80-27t84-9q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80q-83 0-156-31.5Zm-146.5-586Q160-715 160-740t17.5-42.5Q195-800 220-800t42.5 17.5Q280-765 280-740t-17.5 42.5Q245-680 220-680t-42.5-17.5ZM480-480Z"/></svg><span>写真</span></div>
+        <div class="mobile-menu-item" onclick="switchTab('music'); removeMobileMenu()"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M500-360q42 0 71-29t29-71v-220h120v-80H560v220q-13-10-28-15t-32-5q-42 0-71 29t-29 71q0 42 29 71t71 29ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"></path></svg><span>音乐分享</span></div>
+        <div class="mobile-menu-item" onclick="switchTab('chat'); removeMobileMenu()"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M360-400h80v-320h-80v320Zm160 0h80v-320h-80v320ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"></path></svg><span>联系我</span></div>
+        <div class="mobile-menu-item" onclick="switchTab('links'); removeMobileMenu()"><svg class="nav-icon" viewBox="0 -960 960 960"><path d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z"></path></svg><span>我的链接</span></div>
+        <div class="mobile-menu-item" onclick="toggleTheme(); removeMobileMenu()"><svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M337.5-463Q311-498 289-537q-5 14-6.5 28.5T281-480q0 83 58 141t141 58q14 0 28.5-2t28.5-6q-39-22-74-48.5T396-396q-32-32-58.5-67ZM567-364.5Q630-328 702-308q-40 51-98 79.5T481-200q-117 0-198.5-81.5T201-480q0-65 28.5-123t79.5-98q20 72 56.5 135T453-452q51 51 114 87.5ZM743-380q-20-5-39.5-11T665-405q8-18 11.5-36.5T680-480q0-83-58.5-141.5T480-680q-20 0-38.5 3.5T405-665q-8-19-13.5-38T381-742q24-9 49-13.5t51-4.5q117 0 198.5 81.5T761-480q0 26-4.5 51T743-380ZM440-840v-120h80v120h-80Zm0 840v-120h80V0h-80Zm323-706-57-57 85-84 57 56-85 85ZM169-113l-57-56 85-85 57 57-85 84Zm671-327v-80h120v80H840ZM0-440v-80h120v80H0Zm791 328-85-85 57-57 84 85-56 57ZM197-706l-84-85 56-57 85 85-57 57Zm199 310Z"></path></svg><span>切换主题</span></div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <main class="main-content" id="main-content">
+        
+        <div id="page-about" class="page-container active">
+            <div class="bg-slideshow" id="bg-slideshow">
+                <!-- 【关于我】大背景图片在这里替换 -->
+                <div class="bg-slide active" style="background-image: url('images/me/2.png')"></div>
+                <div class="bg-slide" style="background-image: url('images/me/3.png')"></div>
+                 <div class="bg-slide" style="background-image: url('images/me/2.png')"></div>
+                <div class="bg-mask"></div>
+            </div>
+
+            <h1 class="page-title" style="position:relative; z-index:2;">在现实与幻想之间搭建世界</h1>
+            <div class="profile-card" style="position:relative; z-index:2;">
+                <!-- 【关于我】头像在这里替换 -->
+                <img class="avatar" src="images/me/1.jpg" alt="avatar">
+                <div class="bio">
+                    <h2>秋音</h2>
+                    <p class="bio-line1">在创作与生活之间</p>
+                    <p class="bio-line2">记录灵感，也见证热爱与成长</p>
+                    <div class="stats">
+                        <div class="stat-item"><div class="stat-num">1</div><div class="stat-desc">小说连载</div></div>
+                        <div class="stat-item"><div class="stat-num">60+</div><div class="stat-desc">模型作品</div></div>
+                        <div class="stat-item"><div class="stat-num">3000+</div><div class="stat-desc">摄影作品</div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tag-cloud-home" style="position:relative; z-index:2;">
+                <span class="tag-chip-home">unity</span><span class="tag-chip-home">Pixiv</span>
+                <span class="tag-chip-home">photography</span><span class="tag-chip-home">virtual</span>
+                <span class="tag-chip-home">miku</span><span class="tag-chip-home">ACG</span>
+            </div>
+            
+            <div class="about-gallery" id="about-gallery" style="position:relative; z-index:2;">
+                <!-- JS 动态填入关于我的小图 -->
+            </div>
+        </div>
+
+        <div id="page-portfolio" class="page-container">
+            <h1 class="page-title">我的创作</h1>
+            <div class="filter-tabs" id="works-tabs"></div>       
+            <div class="masonry-grid" id="works-grid"></div>
+        </div>
+
+        <div id="page-models" class="page-container">
+            <h1 class="page-title">模型展厅</h1>
+            <div class="model-showcase-wrapper">
+                
+                <!-- 左侧：文案介绍与底部滚轮 -->
+                <div class="model-left-col">
+                    <div class="model-info-panel">
+                        <div class="model-badge">NOW SHOWING</div>
+                        <div class="model-text-content">
+                            <h2 id="model-title">载入中...</h2>
+                            <p id="model-desc">请稍候...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="model-carousel-track">
+                        <div class="model-carousel-title">模型列表 <span>(支持滑动)</span></div>
+                        <div class="model-carousel" id="model-carousel"></div>
+                    </div>
+                </div>
+                
+                <!-- 右侧：超大 3D 展示区 -->
+                <div class="model-viewer-panel" id="model-viewer-panel">
+                    <div id="model-viewer-bg"></div>
+                    <div class="model-loading" id="model-loading">
+                        <div class="model-loading-spinner"></div>
+                        <div class="model-loading-text">模型加载中...</div>
+                    </div>
+                    <model-viewer id="main-3d-viewer" src="" camera-controls auto-rotate rotation-per-second="30deg" shadow-intensity="1.5" exposure="1" environment-image="neutral" interaction-prompt="none"></model-viewer>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div id="page-photos" class="page-container">
+            <h1 class="page-title">记录生活</h1>
+            <div class="filter-tabs" id="photos-tabs"></div>         
+            <div class="masonry-grid" id="photos-grid"></div>
+        </div>
+
+        <div id="page-reference" class="page-container">
+            <h1 class="page-title">写真</h1>
+            <div class="filter-tabs" id="ref-tabs"></div>         
+            <div class="masonry-grid" id="ref-grid"></div>
+        </div>
+
+        <div id="page-writing" class="page-container">
+            <div id="writing-back-btn" onclick="collapseArticle()">
+                <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>返回列表
+            </div>
+            <h1 class="page-title">我想说</h1>
+            <div class="filter-tabs" id="writing-tabs">
+                <button class="filter-btn active" onclick="filterArticles('all', this)">全部</button>
+                <button class="filter-btn" onclick="filterArticles('tech', this)">干货/技术</button>
+                <button class="filter-btn" onclick="filterArticles('essay', this)">随笔/连载</button>
+            </div>
+
+            <div class="article-list">
+
+                <div class="article-item" data-category="tech" onclick="expandArticle(this)">
+                    <div class="article-header">
+                        <div class="article-meta">
+                            <span class="article-date">2026.07.2</span>
+                            <span class="article-badge"># 技术分享</span>
+                        </div>
+                        <div class="article-title">自我介绍</div>
+                        <div class="article-text">
+                            <div class="article-excerpt"> 这儿有模型、有照片、有字，还有一个闲不住的人</div>
+                        </div>
+                    </div>
+                    <div class="article-imgs landscape"><img src="images/story/1.png" onclick="event.stopPropagation(); openLightbox(this)"></div>
+                    <div class="article-content-wrapper" style="display:none;">
+                        <div class="article-text-full">
+                            <p class="drop-cap">探这个网站源码源于一位好友的馈赠，我在其源码上进行迭代优化，现已至第二代。<br>我对一切让我好奇的事物充满热情—改好看的模型、研究让我抓脑的BUG，或是一首歌。</p>
+                            <p>我喜欢安静的环境、音乐与黑色系美学等。。。
+                            欢迎你来到我的空间，希望这个角落能给你带来一些共鸣。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-item" data-category="essay" onclick="expandArticle(this)">
+                    <div class="article-header">
+                        <div class="article-meta">
+                            <span class="article-badge" style="background:#5c6bc0; color:#fff;">[小说] </span>
+                        </div>
+                        <div class="article-title">我与苏的故事</div>
+                        <div class="article-text">
+                            <div class="article-excerpt">瞎想的故事</div>
+                        </div>
+                    </div>
+                    <div class="article-imgs portrait"><img src="images/story/2.png" onclick="event.stopPropagation(); openLightbox(this)"></div>
+                    <div class="article-content-wrapper" style="display:none;">
+                        <div class="article-text-full">
+                            <p class="drop-cap">在</p><p style="display:inline">一个午后，苏在书房擦书架底层的灰。女仆装的裙摆铺在地板上，她抽出一本黑色册子。翻开，愣住了。全是铅笔素描。她趴在餐桌上睡着的侧脸，嘴角有一点口水印。她蹲在阳台浇水的背影。她刚洗完澡，顶着翘起来的头发，对着风扇发呆</p><br>
+                            <p>每一页都是她。纸页边缘被翻得起了毛边。苏正发愣，身后传来脚步声。“……找到了吗？”秋音站在门口，逆光里只看见一个轮廓。她穿着黑色执事制服，猫耳发箍歪了一点。苏举起册子：“这是什么？”秋音走过来，蹲下来，视线和苏平齐。她伸手想拿回：“给我。”
+                                苏把册子按在胸口：“不给。”秋音的手停在半空。她垂下眼，耳尖慢慢红了。午后光线照过来，她耳廓上的绒毛清晰可见。
+                                “……画得不好。”她低声说，手指卷着袖口。苏看着她。秋音垂着眼，睫毛在脸上投下一小片阴影。她平时那么温柔从容的人，此刻却像个被捉住的孩子，连呼吸都放轻了。苏把册子抱紧，另一只手伸过去，抱住了秋音的腰。秋音僵住了。苏把脸埋进她的肩窝里。秋音身上有淡淡的皂香，混着旧书的味道。
+                                秋音的手悬在半空，停了很久，才轻轻落在她的后背上。“……苏？”秋音的声音很轻。
+                                “嗯。”“……生气了？”苏摇头，发丝蹭着秋音的下巴。她抱得更紧，手指攥住秋音背后的制服。“秋音，”苏闷声说，“你画了我这么多啊。”秋音的手从苏后背滑上来，落在她后颈上，轻轻握着。掌心很暖，带着一点薄汗。“嗯，”秋音低声说，“画了……很久。”
+                                苏抬起头。秋音正看着她，眼神很软，耳尖红着，嘴角有一点点笑意。“害羞了？”苏问。秋音眨了下眼，别过脸，露出通红的耳朵：
+                                “……有一点。”苏凑过去，额头抵住秋音的额头。两人鼻尖碰在一起。秋音的手从苏后颈滑下来，捧住她的脸。拇指轻轻蹭过苏的颧骨。“……地上凉，”秋音低声说，“起来好不好？”“不要。”苏闭上眼睛，“再抱一下。”秋音叹了口气，跪坐下来，让苏靠进她怀里。下巴搁在苏的发顶上，手顺着她的后背，很慢。
+                                “还有多少页？”苏问。秋音沉默了一会儿：“……画满了。”“以后给我看？”“……嗯。”秋音把脸埋进苏的头发里，
+                                “以后……一页一页给你看。”苏在她怀里点头。秋音的心跳声透过衣料传过来，很稳。她们就这样抱着。书页被风掀起一角，又落下 </p>
+                            <blockquote><p>“她翻的是纸，我看的是她。”</p></blockquote>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-item" data-category="essay" onclick="expandArticle(this)">
+                    <div class="article-header">
+                        <div class="article-meta">
+                            <span class="article-badge" style="background:#4caf50; color:#fff;"># 生活随笔</span>
+                            <span class="article-badge" style="background:#ff9800; color:#fff;"># 目标规划</span>
+                        </div>
+                        <div class="article-title">关于网站的未来打算</div>
+                        <div class="article-text">
+                            <div class="article-excerpt">我想用来记录自己的生活，分享一些自己的东西</div>
+                        </div>
+                    </div>
+                    <div class="article-imgs" style="display:none;"></div> 
+                    <div class="article-content-wrapper" style="display:none;">
+                        <div class="article-text-full">
+                            <p class="drop-cap">从</p><p style="display:inline">今天起，网站就开始运行了</p><br>
+                            <p>一开始建立在这里，只是为了有个地方发发模型和截图，但慢慢地我发现，一个人的生活不该只有一面。我喜欢构思小说，会有深夜emo的时候，也有很多关于未来的规划和想法（虽然很多都鸽了）就顺带分享出来</p>
+                            <p>“随笔”，想到什么就写什么</p>
+                            <p>希望能在这里记录下自己成长的轨迹。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-music" class="page-container">
+            <h1 class="page-title">听音乐</h1>
+            <div class="music-grid" id="music-grid"></div>
+        </div>
+        
+        <div id="page-chat" class="page-container">
+            <h1 class="page-title">联系我</h1>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages"><div class="msg other">随便说点什么吧。</div></div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="输入消息..." onkeypress="handleChatEnter(event)">
+                    <button class="chat-send" onclick="sendMessage()"><svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-links" class="page-container">
+            <h1 class="page-title">传送门</h1>
+            <div class="link-grid">
+                <a href=" 链接放这 " class="link-card" target="_blank">
+                    <div class="link-icon-box"><svg class="link-icon" viewBox="0 0 24 24" vertical-align="middle" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4zm5-7l2 3m6-3l-2 3m-5 7v-2m6 0v2"/></svg></div>
+                    <div class="link-info"><div class="link-name">哔哩哔哩</div><div class="link-id">暂不公开</div></div>
+                </a>
+                <a href="https://github.com/" class="link-card" target="_blank">
+                    <div class="link-icon-box"><svg class="link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" vertical-align="middle"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2c2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2a4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6c-.6.6-.6 1.2-.5 2V21"/></svg></div>
+                    <div class="link-info"><div class="link-name">GitHub</div><div class="link-id"> WSDw46 </div></div>
+                </a>
+            </div>
+            <h1>&ensp;</h1>
+            <h1 class="page-title">友链</h1>
+            <div class="link-grid">
+                <!-- NekoFile -->
+                <a href="https://nekofile.com/" class="link-card" target="_blank" one-link-mark="yes">
+                    <img class="link-icon-box" src="images/links/nekofile.png">
+                    <div class="link-info">
+                        <div class="link-name">NekoFile</div>
+                        <div class="link-id">现实 = 幻想</div>
+                    </div>
+                </a>
+                
+                <!-- 星隅の小站 -->
+                <a href="https://www.shingyu.cn" class="link-card" target="_blank" one-link-mark="yes">
+                    <img class="link-icon-box" src="images/links/shingyu.png">
+                    <div class="link-info">
+                        <div class="link-name">星隅の小站</div>
+                        <div class="link-id">愿世界，如你我所愿♪</div>
+                    </div>
+                </a>
+
+                <!-- 喳儿 -->
+                <a href="https://sekaitools.chaer.xyz/" class="link-card" target="_blank" one-link-mark="yes">
+                    <img class="link-icon-box" src="images/links/chaer.svg">
+                    <div class="link-info">
+                        <div class="link-name">「世界」工具箱</div>
+                        <div class="link-id">碴儿.NET | 世界计划工具集合</div>
+                    </div>
+                </a>
+
+                <!-- 无翼 -->
+                <a href="https://wuyi-sama.github.io/wuyi.web/" class="link-card" target="_blank" one-link-mark="yes">
+                    <div class="link-icon-box"><svg class="link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+                    <div class="link-info">
+                        <div class="link-name">WUYI的摄影作品</div>
+                        <div class="link-id">相机记录光影，虚拟定格瞬间</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // =====================================================================
+        // ⬇️ 秋音的可视化数据配置中心 (在这里替换你自己的图片和模型) ⬇️
+        // =====================================================================
+
+        /* ==== 1. 我的图库配置 ====
+           每个大块为一个 images/ 下的文件夹，
+           子文件夹作为分类标签自动识别，图片统一命名为 1.jpg、2.jpg……
+           count 为该分类下的图片数量，放图后请自行修改。 */
+        const galleryConfig = {
+            // 关于我主页展示 (4张小图)
+            about: {
+                folder: "about",
+                count: 4
+            },
+            // 我的创作：横屏 / 竖屏 / 关于我 / 女儿
+            works: {
+                folder: "works",
+                subfolders: [
+                    { name: "横屏", folder: "横屏", count: 0 },
+                    { name: "竖屏", folder: "竖屏", count: 0 },
+                    { name: "关于我", folder: "关于我", count: 0 },
+                    { name: "女儿", folder: "女儿", count: 0 }
+                ]
+            },
+            // 记录生活：横屏 / 竖屏
+            photos: {
+                folder: "photos",
+                subfolders: [
+                    { name: "横屏", folder: "横屏", count: 0 },
+                    { name: "竖屏", folder: "竖屏", count: 0 }
+                ]
+            },
+            // 写真：横屏 / 竖屏 / 夏日特别篇
+            ref: {
+                folder: "reference",
+                subfolders: [
+                    { name: "横屏", folder: "横屏", count: 0 },
+                    { name: "竖屏", folder: "竖屏", count: 0 },
+                    { name: "夏日特别篇", folder: "夏日特别篇", count: 12 }
+                ]
+            }
+        };
+
+        /* ==== 2. 3D 模型展厅配置 ==== */
+        const my3DModelsData = [
+            { 
+                title: "魔法兔", 
+                desc: "此功能正在测试中，由于模型精细度太高只能进行大量的压缩，不然会很卡，模型非完全版（有问题没修）<br> <br>使用方法：点击右侧调整位置即可", 
+                glb: "models/魔法兔.glb", 
+                thumb: "images/cz/1.png", 
+                theme: "radial-gradient(circle, rgba(92, 107, 192, 0.2) 0%, transparent 70%)" 
+            },
+            
+          
+        ];
+
+        /* ==== 3. 音乐分享配置 ==== */
+        const myMusicData = [
+            { id: 1, title: "セカイ", artist: "STUDY WITH MIKU", cover: "music/1.png", mp3: "music/1.mp3" },
+            { id: 2, title: "MIKU休息了", artist: "和未來一起喝茶 ", cover: "music/2.png", mp3: "music/2.mp3" },
+            { id: 3, title: "Monitoring (Best Friend Remix) feat", artist: "DECO_27", cover: "music/3.png", mp3: "music/3.mp3" },
+			{ id: 4, title: "ひそかな願い", artist: "ユイカ", cover: "music/4.jpg", mp3: "music/4.mp3" },
+		    { id: 5, title: "you", artist: "Lane 8", cover: "music/5.jpg", mp3: "music/5.mp3" },
+		    { id: 6, title: "Never Say Die", artist: "CHVRCHES", cover: "music/6.jpg", mp3: "music/6.mp3"},
+		    { id: 7, title: "AIR", artist: "初音", cover: "music/7.jpg", mp3: "music/7.mp3" },
+		    { id: 8, title: "echo", artist: "higma", cover: "music/8.jpg", mp3: "music/8.mp3" },
+		    { id: 9, title: "Vertical Section ", artist: "Clean Tears ", cover: "music/9.jpg", mp3: "music/9.mp3" },
+		    { id: 10, title: "Elements", artist: "Clean Tears", cover: "music/10.jpg", mp3: "music/10.mp3" },
+        ];
+
+        /* ==== 4. 聊天机器人词库 ==== */
+        const chatCorpus = {
+            "Default": "没听懂，你可以试试问关于“作品”、“联系”等话题~ X﹏X",
+            "你好": "你好！欢迎来到我的网站",
+            "作品": "点击左侧的【我的创作】可以看到我以前的作品哦",
+            "联系": "你可以通过底部菜单找到我",
+            "工具": "我主要使用 VRChat、Unity 和 Blender",         
+            "这个": "这里是秋音的网站哦",
+            "喂": "喂喂喂，收到请回答！",
+        };
+
+        // =====================================================================
+        // ⬆️ 数据配置区结束 (下面的代码不要动啦！) ⬆️
+        // =====================================================================
+
+        let currentTabId = 'about';
+        
+        // 全局 IntersectionObserver 实例，用于懒加载和动画触发
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal-visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        function switchTab(tabId, pushHistory = true) {         
+            currentTabId = tabId;
+            document.querySelectorAll('.nav-item').forEach(item => { item.classList.remove('active'); if(item.getAttribute('onclick')?.includes(tabId)) item.classList.add('active'); });
+            const bottomItems = document.querySelectorAll('.bottom-nav-item');
+            bottomItems.forEach(item => item.classList.remove('active'));
+            let inBottomBar = false;
+            bottomItems.forEach(item => { if(item.getAttribute('onclick')?.includes(tabId)) { item.classList.add('active'); inBottomBar = true; }});
+            if (!inBottomBar && bottomItems.length > 0) bottomItems[bottomItems.length - 1].classList.add('active');
+
+            document.querySelectorAll('.page-container').forEach(page => page.classList.remove('active'));
+            if (tabId === 'writing') collapseArticle(); 
+            
+            const targetPage = document.getElementById('page-' + tabId);
+            if (targetPage) { targetPage.classList.add('active'); targetPage.scrollTop = 0; }
+            if (pushHistory) history.pushState({ tabId: tabId }, '', `#${tabId}`);
+            removeMobileMenu(); updateMiniPlayer(); 
+            
+            // 控制 model-viewer：首次进入模型展厅时按需加载库与模型，离开时暂停
+            if (tabId === 'models') {
+                ensureModelViewerReady().then(() => {
+                    requestAnimationFrame(() => {
+                        loadActiveModel();
+                    });
+                });
+            } else {
+                setModelLoading(false);
+                const modelViewer = document.getElementById('main-3d-viewer');
+                if (modelViewer && typeof modelViewer.pause === 'function') {
+                    modelViewer.pause();
+                }
+            }
+        }
+
+        window.addEventListener('popstate', (e) => {
+            if (e.state && e.state.tabId) switchTab(e.state.tabId, false);
+            else switchTab(window.location.hash.replace('#', '') || 'about', false);
+        });
+
+        function toggleMobileMenu() { document.getElementById('mobile-more-menu').classList.toggle('active'); }
+        function removeMobileMenu() { document.getElementById('mobile-more-menu').classList.remove('active'); }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        function toggleTheme() { 
+            const root = document.documentElement;
+            const newTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        function initSlideshow() {
+            const slides = document.querySelectorAll('.bg-slide');
+            if(slides.length === 0) return;
+            let current = 0;
+            setInterval(() => {
+                slides[current].classList.remove('active');
+                current = (current + 1) % slides.length;
+                slides[current].classList.add('active');
+            }, 6000); 
+            
+            // 动态同步背景图高度以铺满整个滚动区域
+            const pageAbout = document.getElementById('page-about');
+            const bgSlideshow = document.getElementById('bg-slideshow');
+            if (pageAbout && bgSlideshow) {
+                const updateHeight = () => {
+                    bgSlideshow.style.height = pageAbout.scrollHeight + 'px';
+                };
+                updateHeight();
+                window.addEventListener('resize', updateHeight);
+                // 监听内容变化
+                const observer = new MutationObserver(updateHeight);
+                observer.observe(pageAbout, { childList: true, subtree: true });
+            }
+        }
+
+        function initAboutGallery() {
+            const container = document.getElementById('about-gallery');
+            if(!container) return;
+            container.innerHTML = '';
+            const cfg = galleryConfig.about;
+            if(!cfg) return;
+            for(let i = 1; i <= cfg.count; i++) {
+                const div = document.createElement('div');
+                div.className = 'about-photo';
+                div.innerHTML = `<img src="images/${cfg.folder}/${i}.jpg" loading="lazy" alt="about" onerror="this.parentElement.style.display='none'">`;
+                container.appendChild(div);
+            }
+        }
+
+        /* ==== 瀑布流画廊核心 ==== */
+        function initTabs(section) {
+            const container = document.getElementById(section + '-tabs');
+            if(!container) return;
+            const cfg = galleryConfig[section];
+            if(!cfg || !cfg.subfolders) return;
+            let html = `<button class="filter-btn active" onclick="loadGrid('${section}', 'all', this)">全部</button>`;
+            cfg.subfolders.forEach(sub => {
+                html += `<button class="filter-btn" onclick="loadGrid('${section}', '${sub.folder}', this)">${sub.name}</button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function loadGrid(section, filter = 'all', btnElement = null) {
+            const grid = document.getElementById(section + '-grid');
+            if(!grid) return;
+            if(btnElement) {
+                btnElement.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btnElement.classList.add('active');
+            }
+            grid.innerHTML = ''; 
+            const fragment = document.createDocumentFragment();
+            
+            const cfg = galleryConfig[section];
+            if(!cfg || !cfg.subfolders) return;
+            
+            let foldersToLoad = [];
+            if(filter === 'all') {
+                foldersToLoad = cfg.subfolders;
+            } else {
+                foldersToLoad = cfg.subfolders.filter(s => s.folder === filter);
+            }
+            
+            const observer = revealObserver;
+
+            foldersToLoad.forEach(folderItem => {
+                for(let i = 1; i <= folderItem.count; i++) {
+                    const imgPath = `images/${cfg.folder}/${folderItem.folder}/${i}.jpg`;
+                    const card = document.createElement('div');
+                    card.className = 'masonry-item reveal-hidden'; 
+                    card.innerHTML = `
+                        <img src="${imgPath}" loading="lazy" alt="${folderItem.name}" onerror="this.parentElement.style.display='none'">
+                        <div class="item-overlay"><div class="overlay-title">${folderItem.name}</div><div class="overlay-type">NO. ${i}</div></div>
+                    `;
+                    fragment.appendChild(card);
+                    observer.observe(card); 
+                }
+            });
+            grid.appendChild(fragment);
+            setTimeout(() => grid.querySelectorAll('.masonry-item').forEach(el => el.addEventListener('click', createRipple)), 0);
+        }
+
+        /* ==== 3D 模型展厅（按需加载，避免阻塞首屏） ==== */
+        let modelViewerLibLoaded = false;
+        let currentModelIndex = -1;
+
+        function setModelLoading(show) {
+            const loader = document.getElementById('model-loading');
+            if(loader) loader.classList.toggle('hidden', !show);
+        }
+
+        function loadModelViewerLibrary() {
+            return new Promise((resolve, reject) => {
+                if (modelViewerLibLoaded || window.customElements && customElements.get('model-viewer')) {
+                    resolve();
+                    return;
+                }
+                const script = document.createElement('script');
+                script.type = 'module';
+                script.src = 'https://unpkg.com/@google/model-viewer@3.4.0/dist/model-viewer.min.js';
+                script.onload = () => { modelViewerLibLoaded = true; resolve(); };
+                script.onerror = () => reject(new Error('model-viewer 加载失败'));
+                document.head.appendChild(script);
+            });
+        }
+
+        function init3DModels() {
+            const carousel = document.getElementById('model-carousel');
+            if(!carousel) return;
+            carousel.innerHTML = '';
+            
+            my3DModelsData.forEach((model, index) => {
+                const thumb = document.createElement('div');
+                thumb.className = `model-thumb ${index === 0 ? 'active' : ''}`;
+                thumb.innerHTML = `
+                    <img src="${model.thumb}" alt="thumb" loading="lazy">
+                    <div class="model-thumb-label">${model.title}</div>
+                `;
+                thumb.onclick = () => select3DModel(index, thumb);
+                carousel.appendChild(thumb);
+            });
+            
+            // 仅构建 UI，不加载 3D 模型库和 GLB，避免阻塞首屏
+            currentModelIndex = my3DModelsData.length > 0 ? 0 : -1;
+            if(my3DModelsData.length > 0) {
+                const firstModel = my3DModelsData[0];
+                const titleEl = document.getElementById('model-title');
+                const descEl = document.getElementById('model-desc');
+                if(titleEl) titleEl.innerHTML = firstModel.title;
+                if(descEl) descEl.innerHTML = firstModel.desc;
+                document.getElementById('model-viewer-bg').style.background = firstModel.theme;
+            }
+        }
+
+        function loadActiveModel() {
+            if (currentModelIndex < 0 || currentModelIndex >= my3DModelsData.length) return;
+            const model = my3DModelsData[currentModelIndex];
+            const viewer = document.getElementById('main-3d-viewer');
+            if (!viewer || !model.glb) return;
+            
+            // 如果已经加载过同一个模型，直接播放
+            if (viewer.src && viewer.src.includes(model.glb)) {
+                setModelLoading(false);
+                if (typeof viewer.play === 'function') viewer.play();
+                return;
+            }
+            
+            setModelLoading(true);
+            const onLoad = () => {
+                setModelLoading(false);
+                if (typeof viewer.play === 'function') viewer.play();
+                viewer.removeEventListener('load', onLoad);
+                viewer.removeEventListener('error', onError);
+            };
+            const onError = () => {
+                setModelLoading(false);
+                const loaderText = document.querySelector('#model-loading .model-loading-text');
+                if(loaderText) loaderText.textContent = '模型加载失败，请刷新重试';
+                viewer.removeEventListener('load', onLoad);
+                viewer.removeEventListener('error', onError);
+            };
+            viewer.addEventListener('load', onLoad);
+            viewer.addEventListener('error', onError);
+            viewer.src = model.glb;
+        }
+
+        function ensureModelViewerReady() {
+            return loadModelViewerLibrary().catch(err => {
+                console.warn('[Model] 库加载失败', err);
+                const loaderText = document.querySelector('#model-loading .model-loading-text');
+                if(loaderText) loaderText.textContent = '模型组件加载失败';
+            });
+        }
+
+        function select3DModel(index, thumbElement) {
+            if (index === currentModelIndex && thumbElement && thumbElement.classList.contains('active')) return;
+            currentModelIndex = index;
+            const model = my3DModelsData[index];
+            const viewer = document.getElementById('main-3d-viewer');
+            const titleEl = document.getElementById('model-title');
+            const descEl = document.getElementById('model-desc');
+            
+            titleEl.style.opacity = 0; descEl.style.opacity = 0;
+            
+            setTimeout(() => {
+                titleEl.innerHTML = model.title;
+                descEl.innerHTML = model.desc;
+                titleEl.style.opacity = 1; descEl.style.opacity = 1;
+            }, 200);
+
+            document.getElementById('model-viewer-bg').style.background = model.theme;
+
+            document.querySelectorAll('.model-thumb').forEach(el => el.classList.remove('active'));
+            if(thumbElement) thumbElement.classList.add('active');
+
+            // 只有模型展厅处于激活状态时才真正加载 GLB，否则仅记录索引
+            if (currentTabId === 'models') {
+                ensureModelViewerReady().then(() => {
+                    // 给库一点升级自定义元素的时间
+                    requestAnimationFrame(() => loadActiveModel());
+                });
+            } else {
+                if(viewer) viewer.src = '';
+            }
+        }
+
+        /* ==== 音乐播放完整逻辑 ==== */
+        let currentAudio = null;
+        let currentPlayingId = null;
+        let fadeInterval = null;
+
+        function fadeAudio(audio, targetVolume, duration, callback) {
+            clearInterval(fadeInterval);
+            const steps = 20;
+            const stepTime = duration / steps;
+            const volumeStep = (targetVolume - audio.volume) / steps;
+            
+            fadeInterval = setInterval(() => {
+                let newVolume = audio.volume + volumeStep;
+                if ((volumeStep > 0 && newVolume >= targetVolume) || (volumeStep < 0 && newVolume <= targetVolume)) {
+                    audio.volume = targetVolume;
+                    clearInterval(fadeInterval);
+                    if (callback) callback();
+                } else {
+                    audio.volume = newVolume;
+                }
+            }, stepTime);
+        }
+
+        function initMusicGrid() {
+            const grid = document.getElementById('music-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            currentAudio = document.getElementById('global-audio');
+            currentAudio.volume = 1;
+
+            myMusicData.forEach(music => {
+                const card = document.createElement('div');
+                card.className = 'music-card'; card.id = `music-card-${music.id}`;
+                card.oncontextmenu = (e) => showContextMenu(e, music.id);
+                card.innerHTML = `
+                    <div class="music-cover-wrapper">
+                        <img class="music-cover" src="${music.cover}" alt="cover">
+                        <div class="play-btn-overlay" onclick="togglePlayMusic(${music.id})">
+                            <svg id="play-icon-${music.id}" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                    </div>
+                    <div class="progress-container" onclick="seekAudio(event, ${music.id})" onmousemove="if(event.buttons===1) seekAudio(event, ${music.id})"><div class="progress-bar" id="progress-${music.id}"></div></div>
+                    <div class="music-info"><div class="music-title">${music.title}</div><div class="music-artist">${music.artist}</div></div>
+                `;
+                grid.appendChild(card);
+            });
+
+            if(currentAudio) {
+                currentAudio.ontimeupdate = function() {
+                    if (currentPlayingId !== null) {
+                        const percentage = (currentAudio.currentTime / currentAudio.duration) * 100;
+                        const bar = document.getElementById(`progress-${currentPlayingId}`);
+                        if (bar) bar.style.width = `${percentage}%`;
+                    }
+                };
+                currentAudio.onended = function() {
+                    if (currentPlayingId !== null) {
+                        document.getElementById(`play-icon-${currentPlayingId}`).innerHTML = '<path d="M8 5v14l11-7z"/>';
+                        document.getElementById(`music-card-${currentPlayingId}`).classList.remove('playing');
+                        document.getElementById(`progress-${currentPlayingId}`).style.width = '0%';
+                        currentPlayingId = null;
+                        updateMiniPlayer();
+                    }
+                }
+            }
+        }
+
+        function togglePlayMusic(id) {
+            const music = myMusicData.find(m => m.id === id);
+            if (!music || !currentAudio) return;
+            const icon = document.getElementById(`play-icon-${id}`);
+            const card = document.getElementById(`music-card-${id}`);
+
+            if (currentPlayingId === id) {
+                if (currentAudio.paused) {
+                    currentAudio.play();
+                    fadeAudio(currentAudio, 1, 300);
+                    if(icon) icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                    if(card) card.classList.add('playing');
+                } else {
+                    fadeAudio(currentAudio, 0, 300, () => {
+                        currentAudio.pause();
+                        if(icon) icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                        if(card) card.classList.remove('playing');
+                        updateMiniPlayer();
+                    });
+                }
+            } else {
+                if (currentPlayingId !== null) {
+                    const prevIcon = document.getElementById(`play-icon-${currentPlayingId}`);
+                    const prevCard = document.getElementById(`music-card-${currentPlayingId}`);
+                    if (prevIcon) prevIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                    if (prevCard) prevCard.classList.remove('playing');
+                    const prevBar = document.getElementById(`progress-${currentPlayingId}`);
+                    if(prevBar) prevBar.style.width = '0%';
+                }
+                
+                const playNew = () => {
+                    currentPlayingId = id;
+                    currentAudio.src = music.mp3;
+                    currentAudio.volume = 0;
+                    currentAudio.play();
+                    fadeAudio(currentAudio, 1, 500); 
+                    
+                    document.getElementById('mini-cover').src = music.cover;
+                    document.getElementById('mini-title').textContent = music.title;
+                    document.getElementById('mini-artist').textContent = music.artist;
+
+                    if(icon) icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                    if(card) card.classList.add('playing');
+                    updateMiniPlayer();
+                };
+
+                if (!currentAudio.paused) {
+                    fadeAudio(currentAudio, 0, 300, playNew); 
+                } else {
+                    playNew();
+                }
+            }
+            updateMiniPlayer();
+        }
+
+        function seekAudio(event, id) {
+            if (currentPlayingId !== id || !currentAudio) return; 
+            const rect = event.currentTarget.getBoundingClientRect();
+            const percentage = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+            if (currentAudio.duration) currentAudio.currentTime = percentage * currentAudio.duration;
+        }
+
+        function updateMiniPlayer() {
+            const miniPlayer = document.getElementById('global-mini-player');
+            const miniIcon = document.getElementById('mini-icon');
+            const miniCover = document.getElementById('mini-cover');
+            
+            if (currentPlayingId !== null && currentTabId !== 'music') {
+                miniPlayer.classList.add('visible');
+                if (!currentAudio.paused) {
+                    miniIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; 
+                    miniCover.classList.remove('paused');
+                } else {
+                    miniIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; 
+                    miniCover.classList.add('paused');
+                }
+            } else {
+                miniPlayer.classList.remove('visible');
+            }
+        }
+
+        /* ==== 右键菜单 ==== */
+        let contextMenuTargetId = null;
+        function showContextMenu(e, id) {
+            e.preventDefault();
+            contextMenuTargetId = id;
+            const menu = document.getElementById('music-context-menu');
+            document.getElementById('ctx-play-text').textContent = (currentPlayingId === id && currentAudio && !currentAudio.paused) ? "暂停" : "播放";
+            menu.style.display = 'flex';
+            
+            let x = e.clientX, y = e.clientY;
+            if (x + menu.offsetWidth > window.innerWidth) x -= menu.offsetWidth;
+            if (y + menu.offsetHeight > window.innerHeight) y -= menu.offsetHeight;
+            menu.style.left = `${x}px`; menu.style.top = `${y}px`;
+        }
+
+        function handleContextMenuAction(action) {
+            const menu = document.getElementById('music-context-menu');
+            menu.style.display = 'none';
+            if (!contextMenuTargetId) return;
+            if (action === 'play') togglePlayMusic(contextMenuTargetId);
+            else if (action === 'restart') {
+                if (currentPlayingId === contextMenuTargetId && currentAudio) { currentAudio.currentTime = 0; currentAudio.play(); }
+                else togglePlayMusic(contextMenuTargetId);
+            } 
+        }
+
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('music-context-menu');
+            if (menu && !menu.contains(e.target)) { menu.style.display = 'none'; }
+        });
+
+        /* ==== 文章分支筛选 ==== */
+        function filterArticles(category, btnElement) {
+            btnElement.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            document.querySelectorAll('.article-item').forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        /* ==== Lightbox 全屏看图 (移植自 main.html) ==== */
+        const Lightbox = (function() {
+            const CONFIG = {
+                allowedClasses: [
+                    'masonry-item',
+                    'about-photo'
+                ],
+                lightboxId: 'lightbox',
+                lightboxImgId: 'lightbox-img',
+                closeBtnClass: 'lightbox-close',
+                activeClass: 'active'
+            };
+
+            const PC_MAX_W = 0.95;
+            const PC_MAX_H = 0.95;
+            const MOBILE_MAX_W = 0.97;
+            const MOBILE_MAX_H = 0.83;
+            const MAX_SCALE = 10;
+            const MIN_SCALE_ABSOLUTE = 0.1;
+            const MIN_SCALE_RELATIVE = 0.5;
+            const RESTORE_DELAY = 300;
+
+            let lightbox = null;
+            let lightboxImg = null;
+            let isInitialized = false;
+
+            let wheelTargetScale = null;
+            let wheelCenterX = 0;
+            let wheelCenterY = 0;
+            let wheelAnimationId = null;
+            let wheelRestTimer = null;
+            const WHEEL_SMOOTHNESS = 0.2;
+
+            let restoreAnimationId = null;
+            let closeOperationId = 0;
+
+            const state = {
+                scale: 1, translateX: 0, translateY: 0, initialScale: 1,
+                naturalWidth: 0, naturalHeight: 0,
+                isDragging: false, dragStartX: 0, dragStartY: 0,
+                lastTranslateX: 0, lastTranslateY: 0, hasDragged: false,
+                isPinching: false, pinchStartDistance: 0, pinchStartScale: 1,
+                pinchCenterX: 0, pinchCenterY: 0,
+                isTouchDragging: false, lastTouchX: 0, lastTouchY: 0,
+                touchStartX: 0, touchStartY: 0
+            };
+
+            function _createDOM() {
+                if (document.getElementById(CONFIG.lightboxId)) {
+                    lightbox = document.getElementById(CONFIG.lightboxId);
+                    lightboxImg = document.getElementById(CONFIG.lightboxImgId);
+                    return;
+                }
+                const overlay = document.createElement('div');
+                overlay.id = CONFIG.lightboxId;
+                overlay.className = 'lightbox-overlay';
+                const closeBtn = document.createElement('span');
+                closeBtn.className = CONFIG.closeBtnClass;
+                closeBtn.innerHTML = '&times;';
+                const img = document.createElement('img');
+                img.id = CONFIG.lightboxImgId;
+                img.className = 'lightbox-image';
+                img.alt = '预览';
+                overlay.appendChild(closeBtn);
+                overlay.appendChild(img);
+                document.body.appendChild(overlay);
+                lightbox = overlay;
+                lightboxImg = img;
+            }
+
+            function _isMobile() { return window.innerWidth <= 700; }
+            function _getViewportLimits() {
+                return _isMobile() ? { maxW: MOBILE_MAX_W, maxH: MOBILE_MAX_H } : { maxW: PC_MAX_W, maxH: PC_MAX_H };
+            }
+            function _computeInitialScale(width, height) {
+                const { maxW, maxH } = _getViewportLimits();
+                return Math.min(window.innerWidth * maxW / width, window.innerHeight * maxH / height);
+            }
+            function _getMinScale() { return Math.max(MIN_SCALE_ABSOLUTE, state.initialScale * MIN_SCALE_RELATIVE); }
+            function _resetState() {
+                state.scale = 1; state.translateX = 0; state.translateY = 0; state.initialScale = 1;
+                state.naturalWidth = 0; state.naturalHeight = 0;
+                state.isDragging = false; state.isPinching = false; state.isTouchDragging = false; state.hasDragged = false;
+                if (lightboxImg) lightboxImg.classList.remove('dragging');
+            }
+            function _applyTransform(animate) {
+                if (!lightboxImg) return;
+                lightboxImg.style.transition = animate === false ? 'none' : 'opacity 0.45s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1)';
+                lightboxImg.style.transform = `translate(calc(-50% + ${state.translateX.toFixed(2)}px), calc(-50% + ${state.translateY.toFixed(2)}px)) scale(${state.scale.toFixed(4)})`;
+            }
+            function _clampTranslation() {
+                const scaledW = state.naturalWidth * state.scale;
+                const scaledH = state.naturalHeight * state.scale;
+                const maxX = Math.max(0, (scaledW - window.innerWidth) / 2);
+                const maxY = Math.max(0, (scaledH - window.innerHeight) / 2);
+                state.translateX = Math.max(-maxX, Math.min(maxX, state.translateX));
+                state.translateY = Math.max(-maxY, Math.min(maxY, state.translateY));
+            }
+            function _zoomTo(newScale, centerX, centerY) {
+                const oldScale = state.scale;
+                const clampedScale = Math.max(_getMinScale(), Math.min(MAX_SCALE, newScale));
+                if (clampedScale === oldScale) return;
+                const imgCenterX = window.innerWidth / 2 + state.translateX;
+                const imgCenterY = window.innerHeight / 2 + state.translateY;
+                const offsetX = centerX - imgCenterX;
+                const offsetY = centerY - imgCenterY;
+                state.scale = clampedScale;
+                state.translateX = centerX - offsetX * (clampedScale / oldScale) - window.innerWidth / 2;
+                state.translateY = centerY - offsetY * (clampedScale / oldScale) - window.innerHeight / 2;
+                _clampTranslation();
+                _applyTransform(false);
+            }
+            function _cancelWheelAnimation() {
+                if (wheelAnimationId) { cancelAnimationFrame(wheelAnimationId); wheelAnimationId = null; }
+                wheelTargetScale = null;
+                if (wheelRestTimer) { clearTimeout(wheelRestTimer); wheelRestTimer = null; }
+            }
+            function _cancelRestoreAnimation() {
+                if (restoreAnimationId) { cancelAnimationFrame(restoreAnimationId); restoreAnimationId = null; }
+            }
+            function _restoreToInitialScale() {
+                _cancelRestoreAnimation();
+                if (state.scale >= state.initialScale) return;
+                const startScale = state.scale, startX = state.translateX, startY = state.translateY;
+                const targetScale = state.initialScale;
+                const startTime = performance.now(), duration = 450;
+                function step(now) {
+                    const t = Math.min(1, (now - startTime) / duration);
+                    const ease = t * (2 - t);
+                    state.scale = startScale + (targetScale - startScale) * ease;
+                    state.translateX = startX * (1 - ease);
+                    state.translateY = startY * (1 - ease);
+                    _applyTransform(false);
+                    if (t < 1) { restoreAnimationId = requestAnimationFrame(step); } else { restoreAnimationId = null; }
+                }
+                restoreAnimationId = requestAnimationFrame(step);
+            }
+            function _openBySrc(imgSrc) {
+                if (!imgSrc || !lightbox || !lightboxImg) { console.warn('[Lightbox] 无法打开，src 或 DOM 缺失'); return; }
+                _cancelWheelAnimation(); _cancelRestoreAnimation();
+                closeOperationId++; _resetState();
+                lightboxImg.style.opacity = '0'; _applyTransform(false);
+                lightboxImg.src = imgSrc;
+                lightbox.classList.add(CONFIG.activeClass);
+                document.body.style.overflow = 'hidden';
+                if (lightboxImg.complete && lightboxImg.naturalWidth) _onImageLoad();
+            }
+            function _onImageLoad() {
+                state.naturalWidth = lightboxImg.naturalWidth || lightboxImg.width;
+                state.naturalHeight = lightboxImg.naturalHeight || lightboxImg.height;
+                if (!state.naturalWidth || !state.naturalHeight) return;
+                state.initialScale = _computeInitialScale(state.naturalWidth, state.naturalHeight);
+                lightboxImg.style.borderRadius = `${20 / state.initialScale}px`;
+                state.scale = state.initialScale * 0.83; state.translateX = 0; state.translateY = 0;
+                _applyTransform(false); lightboxImg.style.opacity = '0';
+                lightboxImg.offsetHeight;
+                state.scale = state.initialScale; _applyTransform(true); lightboxImg.style.opacity = '1';
+            }
+            function _close() {
+                if (!lightbox) return;
+                _cancelWheelAnimation(); _cancelRestoreAnimation();
+                document.body.style.overflow = '';
+                const thisCloseId = ++closeOperationId;
+                state.scale = state.scale * 0.83; _applyTransform(true);
+                lightboxImg.style.opacity = '0'; lightbox.classList.remove(CONFIG.activeClass);
+                setTimeout(() => {
+                    if (lightboxImg && closeOperationId === thisCloseId) {
+                        lightboxImg.src = ''; lightboxImg.removeAttribute('src');
+                        _resetState(); _applyTransform(false);
+                    }
+                }, 450);
+            }
+            function _extractImageSrc(matchedElement, clickedTarget) {
+                if (clickedTarget && clickedTarget.tagName === 'IMG') return clickedTarget.currentSrc || clickedTarget.src;
+                if (clickedTarget && clickedTarget !== matchedElement) {
+                    const innerImg = clickedTarget.querySelector('img');
+                    if (innerImg) return innerImg.currentSrc || innerImg.src;
+                }
+                if (matchedElement.tagName === 'IMG') return matchedElement.currentSrc || matchedElement.src;
+                const img = matchedElement.querySelector('img');
+                return img ? (img.currentSrc || img.src) : '';
+            }
+            function _handleDocumentClick(event) {
+                if (event.button !== 0) return;
+                const target = event.target;
+                const selector = CONFIG.allowedClasses.map(c => '.' + c).join(', ');
+                let matched = null;
+                if (target.closest) {
+                    matched = target.closest(selector);
+                } else {
+                    let el = target;
+                    while (el && el !== document.body) {
+                        if (el.matches && el.matches(selector)) { matched = el; break; }
+                        el = el.parentElement;
+                    }
+                }
+                if (matched) {
+                    const src = _extractImageSrc(matched, target);
+                    if (src) { event.preventDefault(); _openBySrc(src); }
+                }
+            }
+            function _handleLightboxClick(event) {
+                const t = event.target;
+                if (t.classList.contains(CONFIG.closeBtnClass)) { _close(); return; }
+                if (t === lightbox) { _close(); return; }
+                if (t === lightboxImg) {
+                    if (!state.hasDragged && !state.isDragging && !state.isPinching && !state.isTouchDragging) _close();
+                    return;
+                }
+            }
+            function _handleKeydown(event) { if (event.key === 'Escape') _close(); }
+            function _handleMessage(event) {
+                if (event.origin !== window.location.origin) return;
+                if (event.data && event.data.type === 'LIGHTBOX_OPEN' && event.data.src) _openBySrc(event.data.src);
+            }
+            function _handleWheel(event) {
+                if (!lightbox || !lightbox.classList.contains(CONFIG.activeClass)) return;
+                event.preventDefault();
+                const delta = -event.deltaY;
+                const factor = Math.exp(delta * 0.002);
+                if (wheelTargetScale === null) wheelTargetScale = state.scale;
+                wheelTargetScale *= factor;
+                wheelTargetScale = Math.max(_getMinScale(), Math.min(MAX_SCALE, wheelTargetScale));
+                wheelCenterX = event.clientX; wheelCenterY = event.clientY;
+                _cancelRestoreAnimation();
+                if (wheelRestTimer) clearTimeout(wheelRestTimer);
+                wheelRestTimer = setTimeout(() => _restoreToInitialScale(), RESTORE_DELAY);
+                if (!wheelAnimationId) wheelAnimationId = requestAnimationFrame(_wheelAnimation);
+            }
+            function _wheelAnimation() {
+                if (wheelTargetScale === null) { wheelAnimationId = null; return; }
+                const diff = wheelTargetScale - state.scale;
+                if (Math.abs(diff) < 0.001) {
+                    state.scale = wheelTargetScale; _zoomTo(state.scale, wheelCenterX, wheelCenterY);
+                    wheelTargetScale = null; wheelAnimationId = null; return;
+                }
+                const newScale = state.scale + diff * WHEEL_SMOOTHNESS;
+                _zoomTo(newScale, wheelCenterX, wheelCenterY);
+                wheelAnimationId = requestAnimationFrame(_wheelAnimation);
+            }
+            function _handleMouseDown(event) {
+                if (event.button !== 0) return;
+                if (!lightbox || !lightbox.classList.contains(CONFIG.activeClass)) return;
+                if (event.target !== lightboxImg) return;
+                _cancelWheelAnimation(); _cancelRestoreAnimation();
+                event.preventDefault();
+                state.isDragging = true; state.hasDragged = false;
+                state.dragStartX = event.clientX; state.dragStartY = event.clientY;
+                state.lastTranslateX = state.translateX; state.lastTranslateY = state.translateY;
+                lightboxImg.classList.add('dragging');
+            }
+            function _handleMouseMove(event) {
+                if (!state.isDragging) return;
+                event.preventDefault();
+                const dx = event.clientX - state.dragStartX;
+                const dy = event.clientY - state.dragStartY;
+                if (Math.abs(dx) > 2 || Math.abs(dy) > 2) state.hasDragged = true;
+                state.translateX = state.lastTranslateX + dx;
+                state.translateY = state.lastTranslateY + dy;
+                _clampTranslation(); _applyTransform(false);
+            }
+            function _handleMouseUp() {
+                if (!state.isDragging) return;
+                state.isDragging = false;
+                if (lightboxImg) lightboxImg.classList.remove('dragging');
+            }
+            function _getTouchDistance(touches) {
+                const dx = touches[0].clientX - touches[1].clientX;
+                const dy = touches[0].clientY - touches[1].clientY;
+                return Math.hypot(dx, dy);
+            }
+            function _getTouchCenter(touches) {
+                return { x: (touches[0].clientX + touches[1].clientX) / 2, y: (touches[0].clientY + touches[1].clientY) / 2 };
+            }
+            function _handleTouchStart(event) {
+                if (!lightbox || !lightbox.classList.contains(CONFIG.activeClass)) return;
+                _cancelWheelAnimation(); _cancelRestoreAnimation();
+                if (event.touches.length === 1) {
+                    state.isTouchDragging = true; state.hasDragged = false;
+                    state.lastTouchX = event.touches[0].clientX; state.lastTouchY = event.touches[0].clientY;
+                    state.touchStartX = event.touches[0].clientX; state.touchStartY = event.touches[0].clientY;
+                    state.lastTranslateX = state.translateX; state.lastTranslateY = state.translateY;
+                    if (lightboxImg) lightboxImg.classList.add('dragging');
+                } else if (event.touches.length === 2) {
+                    state.isPinching = true; state.isTouchDragging = false;
+                    state.pinchStartDistance = _getTouchDistance(event.touches);
+                    state.pinchStartScale = state.scale;
+                    const center = _getTouchCenter(event.touches);
+                    state.pinchCenterX = center.x; state.pinchCenterY = center.y;
+                    if (lightboxImg) lightboxImg.classList.add('dragging');
+                }
+            }
+            function _handleTouchMove(event) {
+                if (!lightbox || !lightbox.classList.contains(CONFIG.activeClass)) return;
+                event.preventDefault();
+                if (state.isPinching && event.touches.length >= 2) {
+                    const newDistance = _getTouchDistance(event.touches);
+                    const newScale = state.pinchStartScale * (newDistance / state.pinchStartDistance);
+                    const center = _getTouchCenter(event.touches);
+                    _zoomTo(newScale, center.x, center.y);
+                } else if (state.isTouchDragging && event.touches.length === 1) {
+                    const dx = event.touches[0].clientX - state.lastTouchX;
+                    const dy = event.touches[0].clientY - state.lastTouchY;
+                    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) state.hasDragged = true;
+                    state.translateX = state.lastTranslateX + dx;
+                    state.translateY = state.lastTranslateY + dy;
+                    state.lastTranslateX = state.translateX; state.lastTranslateY = state.translateY;
+                    state.lastTouchX = event.touches[0].clientX; state.lastTouchY = event.touches[0].clientY;
+                    _clampTranslation(); _applyTransform(false);
+                }
+            }
+            function _handleTouchEnd(event) {
+                if (!lightbox || !lightbox.classList.contains(CONFIG.activeClass)) return;
+                if (state.isPinching) {
+                    if (event.touches.length < 2) {
+                        state.isPinching = false;
+                        if (event.touches.length === 1) {
+                            state.isTouchDragging = true;
+                            state.lastTouchX = event.touches[0].clientX; state.lastTouchY = event.touches[0].clientY;
+                            state.touchStartX = event.touches[0].clientX; state.touchStartY = event.touches[0].clientY;
+                            state.lastTranslateX = state.translateX; state.lastTranslateY = state.translateY;
+                        } else {
+                            if (lightboxImg) lightboxImg.classList.remove('dragging');
+                            _restoreToInitialScale();
+                        }
+                    }
+                } else if (state.isTouchDragging && event.touches.length === 0) {
+                    state.isTouchDragging = false;
+                    if (lightboxImg) lightboxImg.classList.remove('dragging');
+                    const dx = state.lastTouchX - state.touchStartX;
+                    const dy = state.lastTouchY - state.touchStartY;
+                    if (dx > 100 && Math.abs(dy) < 100) {
+                        _close();
+                    } else {
+                        _restoreToInitialScale();
+                    }
+                }
+            }
+            function _handleResize() {
+                if (!lightbox || !lightbox.classList.contains(CONFIG.activeClass)) return;
+                if (!state.naturalWidth || !state.naturalHeight) return;
+                _cancelWheelAnimation(); _cancelRestoreAnimation();
+                state.initialScale = _computeInitialScale(state.naturalWidth, state.naturalHeight);
+                lightboxImg.style.borderRadius = `${20 / state.initialScale}px`;
+                state.scale = state.initialScale; state.translateX = 0; state.translateY = 0;
+                _applyTransform(true);
+            }
+
+            return {
+                init: function(options) {
+                    if (isInitialized) return this;
+                    if (options && options.allowedClasses) CONFIG.allowedClasses = options.allowedClasses;
+                    _createDOM();
+                    document.addEventListener('click', _handleDocumentClick);
+                    lightbox.addEventListener('click', _handleLightboxClick);
+                    document.addEventListener('keydown', _handleKeydown);
+                    window.addEventListener('message', _handleMessage);
+                    lightboxImg.addEventListener('load', _onImageLoad);
+                    lightbox.addEventListener('wheel', _handleWheel, { passive: false });
+                    lightbox.addEventListener('mousedown', _handleMouseDown);
+                    document.addEventListener('mousemove', _handleMouseMove);
+                    document.addEventListener('mouseup', _handleMouseUp);
+                    lightbox.addEventListener('touchstart', _handleTouchStart, { passive: false });
+                    lightbox.addEventListener('touchmove', _handleTouchMove, { passive: false });
+                    lightbox.addEventListener('touchend', _handleTouchEnd);
+                    lightbox.addEventListener('touchcancel', _handleTouchEnd);
+                    window.addEventListener('resize', _handleResize);
+                    isInitialized = true;
+                    return this;
+                },
+                openBySrc: function(src) { _openBySrc(src); return this; },
+                close: function() { _close(); return this; },
+                getConfig: function() { return { allowedClasses: CONFIG.allowedClasses }; },
+                destroy: function() {
+                    _cancelWheelAnimation(); _cancelRestoreAnimation();
+                    document.removeEventListener('click', _handleDocumentClick);
+                    document.removeEventListener('keydown', _handleKeydown);
+                    window.removeEventListener('message', _handleMessage);
+                    document.removeEventListener('mousemove', _handleMouseMove);
+                    document.removeEventListener('mouseup', _handleMouseUp);
+                    window.removeEventListener('resize', _handleResize);
+                    if (lightbox) {
+                        lightbox.removeEventListener('click', _handleLightboxClick);
+                        lightbox.removeEventListener('wheel', _handleWheel);
+                        lightbox.removeEventListener('mousedown', _handleMouseDown);
+                        lightbox.removeEventListener('touchstart', _handleTouchStart);
+                        lightbox.removeEventListener('touchmove', _handleTouchMove);
+                        lightbox.removeEventListener('touchend', _handleTouchEnd);
+                        lightbox.removeEventListener('touchcancel', _handleTouchEnd);
+                        if (lightboxImg) lightboxImg.removeEventListener('load', _onImageLoad);
+                        if (lightbox.parentNode) lightbox.parentNode.removeChild(lightbox);
+                    }
+                    lightbox = null; lightboxImg = null; isInitialized = false; _resetState();
+                    return this;
+                }
+            };
+        })();
+
+        /* ==== 其它交互 ==== */
+        function openLightbox(element) {
+            let imgSrc = element.tagName === 'IMG' ? element.src : element.querySelector('img').src;
+            Lightbox.openBySrc(imgSrc);
+        }
+        function closeLightbox() { Lightbox.close(); }
+
+        let activeArticle = null;
+        let savedScrollPosition = 0;
+        function expandArticle(element) {
+            if (element.classList.contains('expanded')) return;
+            if (activeArticle) collapseArticle();
+            
+            // 保存当前滚动位置
+            savedScrollPosition = document.getElementById('page-writing').scrollTop;
+            
+            activeArticle = element;
+            element.classList.add('expanded');
+            document.getElementById('writing-back-btn').classList.add('visible');
+            document.getElementById('page-writing').scrollTop = 0;
+            const contentWrapper = element.querySelector('.article-content-wrapper');
+            if(contentWrapper) contentWrapper.style.display = 'block';
+        }
+        function collapseArticle() {
+            if (activeArticle) { 
+                const contentWrapper = activeArticle.querySelector('.article-content-wrapper');
+                if(contentWrapper) contentWrapper.style.display = 'none';
+                activeArticle.classList.remove('expanded'); 
+                activeArticle = null; 
+            }
+            document.getElementById('writing-back-btn').classList.remove('visible');
+            // 恢复到展开前的滚动位置
+            document.getElementById('page-writing').scrollTop = savedScrollPosition;
+        }
+
+        /* ==== 聊天区逻辑 ==== */
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            const container = document.getElementById('chat-messages');
+            const myMsg = document.createElement('div');
+            myMsg.className = 'msg me'; myMsg.textContent = text;
+            container.appendChild(myMsg);
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+            setTimeout(() => {
+                const replyText = getBotReply(text);
+                const replyMsg = document.createElement('div');
+                replyMsg.className = 'msg other'; replyMsg.textContent = replyText;
+                container.appendChild(replyMsg);
+                container.scrollTop = container.scrollHeight;
+            }, 600); 
+        }
+        function getBotReply(text) {
+            for (let key in chatCorpus) if (key !== "Default" && text.includes(key)) return chatCorpus[key];
+            return chatCorpus["Default"];
+        }
+        function handleChatEnter(e) { if (e.key === 'Enter') sendMessage(); }
+
+        /* ==== 滑动返回与涟漪动效 ==== */
+        let touchstartX = 0; let touchendX = 0; let swipeTouchTarget = null;
+        function handleSwipeGesture() {
+            if (touchendX - touchstartX > 100) {
+                // Lightbox 内部的右滑关闭已在 _handleTouchEnd 中处理，
+                // 这里只负责非 Lightbox 区域的右滑返回（如折叠文章）
+                if (swipeTouchTarget && (swipeTouchTarget.id === 'lightbox' || swipeTouchTarget.closest && swipeTouchTarget.closest('#lightbox'))) return;
+                if (activeArticle) collapseArticle();
+            }
+        }
+        document.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; swipeTouchTarget = e.target; }, {passive: true});
+        document.addEventListener('touchend', e => { touchendX = e.changedTouches[0].screenX; handleSwipeGesture(); });
+
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement("span");
+            const d = Math.max(button.clientWidth, button.clientHeight);
+            const rect = button.getBoundingClientRect();
+            circle.style.width = circle.style.height = `${d}px`;
+            circle.style.left = `${event.clientX - rect.left - d/2}px`;
+            circle.style.top = `${event.clientY - rect.top - d/2}px`;
+            circle.classList.add("ripple");
+            circle.addEventListener('animationend', () => circle.remove());
+            button.appendChild(circle);
+        }
+
+        /* ==== 初始化加载 ==== */
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.nav-item, .icon-container, .filter-btn, .tag-chip-home, .mobile-menu-item, .icon-btn').forEach(el => el.addEventListener('click', createRipple));
+            Lightbox.init();
+            initSlideshow(); 
+            initAboutGallery(); 
+            init3DModels();
+            
+            const hash = window.location.hash.replace('#', '');
+            if(hash) switchTab(hash, false);
+            
+            // 延迟加载非首屏内容，避免阻塞首次渲染和交互
+            const defer = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
+            defer(() => {
+                initTabs('works'); loadGrid('works', 'all'); 
+                initTabs('photos'); loadGrid('photos', 'all'); 
+                initTabs('ref'); loadGrid('ref', 'all'); 
+                initMusicGrid();
+            });
+        });
+        document.addEventListener('dragstart', function(e) { if (e.target.tagName === 'IMG' || e.target.tagName === 'A') e.preventDefault(); });
+        
+    </script>
+</body>
+</html>
