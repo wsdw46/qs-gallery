@@ -1,0 +1,76 @@
+/* 保留深浅双色基底；修改此文件即可定制配色。 */
+.mini-info { text-align:left; color:inherit; border:0; background:transparent; cursor:pointer; padding:0; }
+.lightbox-close { border:0; font:inherit; font-size:24px; }
+.link-card[aria-disabled="true"] { opacity:.5; cursor:default; }
+.article-header[role="button"] { border-radius:8px; }
+.sidebar.collapsed ~ .main-content { --nav-offset:80px; }
+
+/* 导航滚动独立于头像和底部按钮，收起时为头像留出完整宽度。 */
+.sidebar-links { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; }
+.sidebar-bottom-actions { flex-shrink: 0; flex-direction: row; border-top: 1px solid #8883; margin-top: 16px; padding-top: 12px; }
+.sidebar .logo-area img { flex-shrink: 0; }
+.sidebar.collapsed .logo-area { justify-content: center; padding: 0; gap: 0; overflow: visible; }
+.sidebar.collapsed .logo-area span { display: none; }
+.sidebar.collapsed .logo-area img { width: 48px; height: 48px; }
+.sidebar.collapsed .sidebar-bottom-actions { flex-direction: column; align-items: center; }
+.sidebar.collapsed .icon-btn { margin-left: 0; }
+.sidebar .nav-item { border-radius: 16px; }
+.sidebar .nav-item.active::before { content: ''; position: absolute; left: 0; top: 16px; bottom: 16px; width: 2px; border-radius: 2px; background: currentColor; }
+.sidebar.collapsed .nav-item { min-width: 0; width: 100%; padding: 0; justify-content: center; }
+.sidebar.collapsed .nav-label { display: none; }
+
+/* 图 3：方形封面、圆角方形播放键、贴合封面的细进度线。 */
+#page-music { background: #08090b; --md-sys-color-on-primary: #08090b; --md-sys-color-primary: #fff; --md-sys-color-surface: #101216; --md-sys-color-on-background: #f4f4f5; }
+#page-music .page-title { font-size: clamp(2.8rem, 4.2vw, 4.2rem); font-weight: 300; letter-spacing: -.02em; margin-bottom: 36px; }
+.music-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+.music-card { min-width: 0; background: #101216; border: 1px solid #ffffff24; border-radius: 20px; }
+.music-card:hover { background: #181a1f; border-color: #ffffff60; transform: translateY(-2px); }
+.music-cover-wrapper { padding-top: 0; aspect-ratio: 1; overflow: hidden; }
+.music-cover { cursor: pointer; }
+.play-btn-overlay { width: 44px; height: 44px; border-radius: 14px; background: #fff; color: #08090b; }
+.play-btn-overlay svg { width: 26px; height: 26px; fill: currentColor; }
+.music-info { padding: 16px; gap: 4px; }
+.music-title { color: #f4f4f5; font-weight: 650; }
+.music-artist { color: #a9acb4; opacity: 1; }
+.progress-container {
+  --progress: 0%; appearance: none; -webkit-appearance: none; display: block; flex-shrink: 0;
+  width: 100%; height: 4px; min-height: 4px; margin: 0; padding: 0; border: 0; border-radius: 0;
+  background: linear-gradient(to right, #fff var(--progress), #30343a var(--progress));
+  position: relative; z-index: 3; cursor: pointer; touch-action: pan-y;
+}
+.progress-container:hover { height: 4px; margin: 0; }
+.progress-container:disabled { opacity: 1; cursor: default; }
+.progress-container::-webkit-slider-runnable-track { height: 4px; background: transparent; }
+.progress-container::-moz-range-track { height: 4px; background: transparent; }
+.progress-container::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 12px; height: 20px; margin-top: -8px; border: 0; background: transparent; }
+.progress-container::-moz-range-thumb { width: 12px; height: 20px; border: 0; background: transparent; }
+.progress-container:focus-visible { outline-offset: 4px; }
+.mini-controls { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+.global-mini-player { background: rgba(16,18,22,.94); }
+.global-mini-player.visible ~ #back-to-top { bottom: 112px; }
+
+.legal-content { max-width: 820px; padding: clamp(20px, 3vw, 36px); background: var(--md-sys-color-surface); border: 1px solid #8883; border-radius: 24px; }
+.legal-content h3 { margin: 28px 0 10px; font-size: 1.15rem; font-weight: 600; }
+.legal-content h3:first-child { margin-top: 0; }
+.legal-content p { color: var(--md-sys-color-on-surface); line-height: 1.9; overflow-wrap: anywhere; }
+
+[data-theme="light"] #page-music { background: #f8f9fa; --md-sys-color-on-background: #20242b; }
+[data-theme="light"] .music-card { background: #fff; border-color: #20242b24; }
+[data-theme="light"] .music-card:hover { background: #f0f2f5; border-color: #20242b60; }
+[data-theme="light"] .music-title { color: #20242b; }
+[data-theme="light"] .music-artist { color: #626873; }
+[data-theme="light"] .play-btn-overlay { background: #20242b; color: #fff; }
+[data-theme="light"] .progress-container { background: linear-gradient(to right, #20242b var(--progress), #dce0e5 var(--progress)); }
+
+@media (min-width: 1100px) { #page-music { padding: 48px 68px 110px; } }
+@media (max-width: 768px) {
+  #page-music .page-title { font-size: 2.5rem; margin-bottom: 28px; }
+  .music-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .music-card { border-radius: 16px; }
+  .music-info { padding: 12px; }
+  .music-title { font-size: .95rem; }
+  .music-artist { font-size: .8rem; }
+  .play-btn-overlay { width: 40px; height: 40px; right: 10px; bottom: 10px; border-radius: 12px; }
+  .global-mini-player.visible ~ #back-to-top { bottom: calc(166px + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) { .page-container { transition: none; } }
